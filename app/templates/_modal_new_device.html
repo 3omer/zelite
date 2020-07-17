@@ -1,0 +1,57 @@
+<!-- new/edit  device form modal -->
+<div class="modal fade" id="device_modal" role="dialog" tabindex="-1">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-light">
+        <h5 class="modal-title">New Device</h5>
+        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="{{url_for('devices')}}" id="device_form" method="POST">
+          <div class="form-group">
+            <label for="name">Device Name</label>
+            <input class="form-control" id="name" name="name"  placeholder="Enter device name" type="text">
+          </div>
+
+          <div class="form-group">
+            <label for="place">Place</label>
+            <input class="form-control" id="place"  name="place" placeholder="Enter device place" type="text">
+          </div>
+
+          <div class="form-group">
+            <label for="port">Port</label>
+            <select class="custom-select" id="port" name="port">
+              <option selected>Open this select menu</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="12">12</option>
+              <option value="14">14</option>
+            </select>
+
+          </div>
+
+          <div class="form-group">
+            <label for="type">Type</label>
+            <select class="custom-select" id="type" name="type">
+              <option selected>Open this select menu</option>
+              <option value="1">Switch</option>
+              <option value="2">Sensor</option>
+            </select>
+
+          </div>
+
+          <div class="border-top p-2">
+            <button class="btn btn-primary" type="submit">Add</button>
+            <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+</script>

@@ -1,0 +1,32 @@
+<h4><span class="badge badge-dark px-3 mb-2">Sensors</span></h4>
+{% if not ( hubs[0] and hubs[0]["sensor_devices"] ) %}
+<div class="alert alert-info" > You have no registered devices yet. Head to Management tab and start adding devices now. </div>
+{% endif %}
+
+<div class="d-flex flex-wrap mx-0 mx-md-2 device-list" id="sensorList">
+    {% for hub in hubs %}
+    {% set sensor_devices = hub["sensor_devices"] %}
+    {% for device in sensor_devices %}
+    <div class="device d-flex m-1 p-1 bg-white rounded-pill shadow-sm" id="{{device.id}}">
+     <div class="bg-light m-1 rounded-circle text-center p-2 border border-secondary">
+            <span style="font-size: 2rem;line-height: 1.5em;">{{device.value}}</span>
+        </div>
+        <div class="device-details pr-4">
+            <div class="device-name" data-target="name">
+                <span class="name-icon"><img
+                        src="{{url_for('static', filename='icons/name.svg')}}" width="12px"></span>
+                <span>{{device.name}}</span>
+            </div>
+            <div class="device-place" data-target="place"><span class="place-icon"><img
+                    src="{{url_for('static', filename='icons/place.svg')}}" width="12px"></span>
+                <span>{{device.place}}</span>
+            </div>
+            <div class="device-port badge"><span class="port-icon"><img
+                    src="{{url_for('static', filename='icons/port.svg')}}" width="12px"></span>
+                <span>{{device.port}}</span>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% endfor %}
+</div>

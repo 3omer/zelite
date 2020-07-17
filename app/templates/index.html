@@ -1,0 +1,13 @@
+{% extends 'base_template.html' %}
+
+{% block content %}
+<section>
+  <div class="container px-0 px-2 ">
+    {% include '_sensors.html' %}
+    {% include '_switches.html' %}
+    <hr>
+  </div>
+</section>
+
+{% include '_modal_new_device.html'%}
+{% endblock %}

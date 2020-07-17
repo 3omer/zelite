@@ -1,0 +1,39 @@
+<form action="" class="device_form" method="POST" data-hub_id="{{hub.id}}">
+<div class="form-row">
+
+  <div class="col-2">
+    <input class="form-control form-control-sm mb-1" id="name" name="name" placeholder="name" type="text">
+  </div>
+  <div class="col-2">
+    <input class="form-control form-control-sm mb-1" id="place" name="place" placeholder="place" type="text">
+  </div>
+
+  <div class="col-3">
+    <select class="custom-select custom-select-sm mb-1" id="port" name="port">
+      <option selected>port</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="12">12</option>
+      <option value="14">14</option>
+    </select>
+  </div>
+
+  <div class="col-3">
+    <select class="custom-select custom-select-sm mb-1" id="type" name="type">
+      <option selected>type</option>
+      <option value="1">Switch</option>
+      <option value="2">Sensor</option>
+    </select>
+  </div>
+  <div class="col-2">
+    <button type="submit" class="btn btn-sm btn-primary mb-1">
+      <span>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 22" width="20" height="20">
+            <rect width="3" height="11" x="6.5" y="5.5" fill="#ffffff"></rect>
+            <rect width="11" height="3" x="2.5" y="9.5" fill="#ffffff"></rect>
+          </svg>
+    </span>
+    </button>
+  </div>
+</div>
+</form>

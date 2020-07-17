@@ -1,0 +1,38 @@
+{% for hub in hubs %}
+<div class="hub bg-white p-2 m-2 shadow-sm ">
+    <div class="d-flex justify-content-between">
+        <h5><span class="badge badge-dark ">{{hub.name}}</span></h5>
+        <button class="delete_hub btn btn-sm btn-danger" data-hub_id="{{hub.id}}">Delete</button>
+    </div>
+    <hr>
+    <div class="p-1">
+        <div>
+        <button class="btn btn-sm btn-secondary " data-toggle="collapse" href="#apiKey">API-KEY</button>
+        </div>
+        <div class="collapse p-1" id="apiKey">
+        <div class="input-group input-group-sm">
+            <input type="text" class="form-control text-break" value="{{hub.token}}" readonly>
+            <div class="input-group-append" id="">
+                <button id="refresh_key" class="btn btn-outline-secondary" type="button">Refresh</button>
+                <button id="copy" class="btn btn-outline-secondary" type="button">Copy</button>
+            </div>
+            <p class="alert alert-warning text-muted">Attention: Keep this key secret</p>
+        </div>
+        </div>
+    </div>
+
+    <hr>
+    {% if hub.devices %}
+    <div class="devices-table  m-1 border">
+        {% set devices = hub.devices %}
+        {% include '_table_devices.html' %}
+    </div>
+    {% endif %}
+    <hr>
+    <div class="p-2 m-2">
+        {% include '_form_new_device.html' %}
+    </div>
+</div>
+{% else %}
+ <div class="alert alert-info">You do not have any devices. Click the "new" Button and configure your Hub.</div>
+{% endfor %}
