@@ -1,2 +1,13 @@
 .idea
-__pycache__/*
+__pycache__/
+.py[cod]
+.installed.cfg
+bin
+develop-eggs
+dist
+downloads
+eggs
+parts
+src/*.egg-info
+lib
+lib64
