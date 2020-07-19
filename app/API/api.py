@@ -18,14 +18,16 @@ def hubs():
         owner = User.get_by_id(current_user.id)
         hub.owner = owner
         hub.save()
-        return Response(status=201)
+        return jsonify(), 201
 
     if request.method == "DELETE":
         hub_id = request.get_json()["hub_id"]
         target_hub = Hub.by_id(hub_id)
         target_hub.delete()
         target_hub.save()
-        return Response(status=204)
+
+        return jsonify(), 204
+
 
 
 @app.route("/api/v1/devices", methods=["GET", "POST"])
