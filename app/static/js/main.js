@@ -1,4 +1,4 @@
-var api_url = "http://" + window.location.host + "/api/v1";
+var api_url = "https://" + window.location.host + "/api/v1";
 var action_url = api_url + "/device/action";
 
 function restMethod(method, url, data, onSuccess) {
