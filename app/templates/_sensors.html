@@ -1,7 +1,4 @@
 <h4><span class="badge badge-dark px-3 mb-2">Sensors</span></h4>
-{% if not ( hubs[0] and hubs[0]["sensor_devices"] ) %}
-<div class="alert alert-info" > You have no registered devices yet. Head to Management tab and start adding devices now. </div>
-{% endif %}
 
 <div class="d-flex flex-wrap mx-0 mx-md-2 device-list" id="sensorList">
     {% for hub in hubs %}
