@@ -1,5 +1,6 @@
 from app import db
 from bson.objectid import ObjectId
+from mongoengine.errors import NotUniqueError, ValidationError
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 import secrets
@@ -15,6 +16,16 @@ class User(UserMixin, db.Document):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+    @classmethod
+    def register(cls, form):
+        username = form.get("username")
+        email = form.get("email")
+        password = form.get("password")
+        new_user = cls(username=username, email=email)
+        new_user.set_password(password)
+        new_user.save()
+
 
     @classmethod
     def get_by_email(cls, email):

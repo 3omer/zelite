@@ -10,11 +10,17 @@
             {% endfor%}
         {% endwith %}
     <div class="card m-auto">
-        <div class="card-header text-dark">Login</div>
+        <div class="card-header text-dark">Register</div>
         <div class="card-body">
-            <form id="loginForm" method="POST" novalidate>
+            <form id="registerForm" method="POST">
                 <div class="form-group">
-                    <input type="text" class="form-control" id="email" name="email" value=""
+                    <input type="text" class="form-control" id="username" name="username" value=""
+                        placeholder="Username" required>
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="form-group">
+                    <input type="email" class="form-control" id="email" name="email" value=""
                         placeholder="Email" required>
                     <div class="invalid-feedback"></div>
                 </div>
@@ -24,13 +30,13 @@
                         placeholder="Password" required>
                     <div class="invalid-feedback"></div>
                 </div>
-                
+
                 <div class="border-top p-2">
-                    <button type="submit" class="btn btn-sm btn-primary">Login</button>
+                    <button type="submit" class="btn btn-sm btn-primary">Register</button>
                 </div>
             </form>
         </div>
     </div>
 </section>
 
-{%endblock%}    
+{%endblock%}

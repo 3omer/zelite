@@ -1,13 +1,27 @@
 from flask import request, redirect, url_for, render_template, flash
 from app import app, login_manager
 from flask_login import login_required, current_user, login_user, logout_user
-from app.mongoDB import User
-
+from app.mongoDB import User, NotUniqueError
+import logging
+log = logging.getLogger()
 
 @login_manager.user_loader
 def load_user(id):
     return User.get_by_id(id)
 
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if request.method == "POST":
+        try:
+            User.register(request.form)
+            flash("Registered Successfully", "success")
+            return redirect(url_for("login"))
+        except NotUniqueError as e:
+            log.error(e)
+            flash("This Username/Email Already Exist, Try another one", "error")
+
+    return render_template("register.html")
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
