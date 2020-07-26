@@ -3,6 +3,7 @@ from app import app, login_manager
 from flask_login import login_required, current_user, login_user, logout_user
 from app.mongoDB import User, NotUniqueError
 import logging
+import re
 log = logging.getLogger()
 
 @login_manager.user_loader
@@ -19,7 +20,8 @@ def register():
             return redirect(url_for("login"))
         except NotUniqueError as e:
             log.error(e)
-            flash("This Username/Email Already Exist, Try another one", "error")
+            filed = "Username" if re.search("username", str(e)) else "Email"
+            flash("This {} Already Exist, Try another one".format(filed), "error")
 
     return render_template("register.html")
 
