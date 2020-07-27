@@ -2,6 +2,15 @@
 
 **Manzel** is an IoT platform to monitor and manage home devices "Lights, Fans, TV ..etc". Basically you can control any device by connecting it to a relay that has an internet connection.
 
+## Live Demo:
+
+ [on heroku](https://smanzel.herokuapp.com/)
+ ```
+ Credintials: admin@manzel.com - pass: admin
+```
+
+
+
 ## Main Components
 
  - **User Dashboard**: A web portal where users can:
