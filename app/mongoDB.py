@@ -88,5 +88,7 @@ class Hub(db.Document):
         self.save()
 
     def get_device(self, port):
-        """:return end device connected to a specific port"""
+        """
+        :param port: port number
+        :returns Device connected to a specific port"""
         return self.devices.filter(port=port).first()

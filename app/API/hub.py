@@ -56,7 +56,6 @@ def connected_devices():
             return jsonify(port_and_status(switched_devices))
 
     if request.method == "PUT":
-        change_flag = False
         data = request.get_json()
         if len(data) < 1:
             return abort(401, message="Invalid data.")
@@ -66,11 +65,9 @@ def connected_devices():
             value = device.get('value')
             if (port is None) or (value is None):
                 continue
-            target_device = sensord_devices.filter(port=port)
-            # update only on changes
+            target_device = sensord_devices.filter(port=port).first()
             if target_device and target_device.value != value:
-                target_device.update(set__value=value)
-                change_flag = True
+                target_device.value = float(value)
 
-        change_flag or hub.save()
+        hub.save()
         return jsonify(message="success")
