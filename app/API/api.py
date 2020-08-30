@@ -50,7 +50,7 @@ def devices():
         name = args.get('name')
         place = args.get('place')
         type = args.get('type')
-        # check if data is valid
+        #TODO: check if data is valid
         hub = Hub.by_id(hub_id)
         device = hub.get_device(port)
         if device is not None:
@@ -65,7 +65,7 @@ def devices():
                 place=place,
                 type=type
             )
-            hub.devices.append(device)
+            hub.add_device(device)
 
         hub.save()
         return jsonify(), 201

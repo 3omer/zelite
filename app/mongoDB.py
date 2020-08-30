@@ -1,4 +1,5 @@
 from app import db
+from app.commons import build_topic_name
 from bson.objectid import ObjectId
 from mongoengine.errors import NotUniqueError, ValidationError
 from flask_login import UserMixin
@@ -10,6 +11,8 @@ class User(UserMixin, db.Document):
     email = db.EmailField(max_length=50, unique=True)
     username = db.StringField(max_length=50, unique=True)
     password_hash = db.StringField(max_length=128)
+    topics_acl = db.ListField(db.StringField())
+
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -38,6 +41,7 @@ class User(UserMixin, db.Document):
     def __repr__(self):
         return "<User {}>".format(self.username)
 
+# TODO: private class modify only by HUB-API
 
 class Device(db.EmbeddedDocument):
 
@@ -51,6 +55,7 @@ class Device(db.EmbeddedDocument):
     type = db.IntField(choices=(1, 2), requiered=True)
     value = db.FloatField(default=0.0)
     is_on = db.BooleanField(default=False)
+    topic_name = db.StringField()
 
     def __repr__(self):
         return "<Device> {}".format(self.name)
@@ -84,8 +89,11 @@ class Hub(db.Document):
         """
         add new device to the hub
         :param device: Device object """
+        device.topic_name = build_topic_name(self.owner.username, self.name, device.port)
         self.devices.append(device)
         self.save()
+        self.owner.topics_acl.append(device.topic_name)
+        self.owner.save()
 
     def get_device(self, port):
         """
