@@ -25,14 +25,9 @@
             </div>
         </div>
         <div class="options col d-flex flex-column">
-            {% if device.is_on == True %}
             <a class="btn action btn-primary" href="{{url_for('deviceaction')}}" data-hub="{{hub.id}}"
-                data-device="{{device.id}}" data-port="{{device.port}}" data-target="is_on" data-is_on="true">TURN
-                OFF</a>
-            {% else %}
-            <a class="btn action btn-secondary" href="{{url_for('deviceaction')}}" data-hub="{{hub.id}}"
-                data-port="{{device.port}}" data-target="is_on" data-is_on="false">TURN ON</a>
-            {% endif %}
+                data-device="{{device.id}}" data-port="{{device.port}}" data-state=""
+               data-target="switch" data-is_on="true" data-topic_name="{{device.topic_name}}">LOADING ..</a>
         </div>
 
     </div>

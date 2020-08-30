@@ -1,4 +1,4 @@
-var api_url = "https://" + window.location.host + "/api/v1";
+var api_url = "http://" + window.location.host + "/api/v1";
 var action_url = api_url + "/device/action";
 
 function restMethod(method, url, data, onSuccess) {
@@ -12,9 +12,15 @@ function restMethod(method, url, data, onSuccess) {
     });
 }
 
-function toggle_device(hub_id, port, is_on) {
+function toggle_device(hub_id, port, is_on, topic) {
+console.log("Is Topic Available ", topic)
+    //    if topic is provided use mqtt
     var port = parseInt(port);
     var is_on = is_on == "true" ? true: false;
+    if (topic) {
+    let payload = is_on ? "0": "1";
+    client.publish(topic, payload);
+    }
     var data = {"hub_id":hub_id , "port":port , "is_on": !is_on};
     var url = "/api/v1/device/action"
     restMethod("PUT", url, JSON.stringify(data))
@@ -76,14 +82,15 @@ function update_device(device){
 
 $(document).ready(function () {
     // prevent click on turn on / turn off btns
-    $('.action').click(function (event) {
-        event.preventDefault();
-        var hub_id = $(this).data('hub');
-        var port = $(this).data('port');
-        var is_on = $(this).data('is_on').toString();
-        console.log('port: ' + port + ' is_on ' + is_on);
-        toggle_device(hub_id, port, is_on);
-    });
+    // $('.action').click(function (event) {
+    //     event.preventDefault();
+    //     var hub_id = $(this).data('hub');
+    //     var port = $(this).data('port');
+    //     var is_on = $(this).data('is_on').toString();
+    //     var topic = $(this).data('topic_name');
+    //     console.log('port: ' + port + ' is_on ' + is_on);
+    //     toggle_device(hub_id, port, is_on, topic);
+    // });
 
     var newDeviceForm = $('.device_form');
     newDeviceForm.on('submit', function (event) {
@@ -150,3 +157,5 @@ $(document).ready(function () {
     console.log('main loadded');
 
 });
+
+
