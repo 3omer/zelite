@@ -5,21 +5,8 @@
 ## Live Demo:
 
  [on heroku](https://smanzel.herokuapp.com/)
- ```
- Credintials: admin@manzel.com - pass: admin
-```
 
 
-
-## Main Components
-
- - **User Dashboard**: A web portal where users can:
-	 - Manage registerd Home-hub.
-	 -  turn on/ off devices and get sensors updates if any.
- - **Home-Hub**: This is could be any IoT Board "ESP8266, Arduino .. etc" act as a RESET Client performing:
-	 -  **GET** requests to fetch last Devices states.
-	 - **PUT** to upload sensors data.
-## Database Models
 
 ## RESET-API
 The endpoints are logically separated into two module: 
