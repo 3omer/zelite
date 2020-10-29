@@ -24,7 +24,7 @@ class ProductionConfig(Config):
 
     MQTT_SETTINGS = {
         "host": os.environ.get("MQTT_HOST"),
-        "port": os.environ.get("MQTT_PORT"),
+        "port": int(os.environ.get("MQTT_PORT")),
     }
 
 class DevelopmentConfig(Config):
