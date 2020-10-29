@@ -95,8 +95,8 @@ $(document).ready(function () {
     * MQTT CLIENT CODE
     *
     */
-    let mqttHost = '127.0.0.1';
-    let port = 8000;
+    let mqttHost = MQTT_SETTINGS.host;
+    let port = MQTT_SETTINGS.port;
     let clientID = 'smanzel-123';
     let client = new Paho.MQTT.Client(mqttHost, port, clientID);
 

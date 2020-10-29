@@ -117,6 +117,10 @@
     <script src="{{ url_for('static', filename='js/jquery-3.4.0.min.js')}}"></script>
     <!-- <script src="../../assets/js/vendor/popper.min.js"></script> -->
     <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script type="text/javascript">
+        const MQTT_SETTINGS = {{ config.MQTT_SETTINGS|tojson }};
+        console.log("--- MQTT Config: ---", MQTT_SETTINGS);
+    </script>
     <!--Paho Client-->
     <script src="{{ url_for('static', filename='js/paho.js') }}"></script>
     <!--main src-->
