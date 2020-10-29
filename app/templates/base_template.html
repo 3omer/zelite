@@ -120,6 +120,7 @@
     <script type="text/javascript">
         const MQTT_SETTINGS = {{ config.MQTT_SETTINGS|tojson }};
         console.log("--- MQTT Config: ---", MQTT_SETTINGS);
+        const MQTT_CLIENT_TOPICS = {{ current_user.topics_acl |tojson }};
     </script>
     <!--Paho Client-->
     <script src="{{ url_for('static', filename='js/paho.js') }}"></script>

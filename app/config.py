@@ -25,7 +25,7 @@ class ProductionConfig(Config):
 
     MQTT_SETTINGS = {
         "host": os.environ.get("MQTT_HOST"),
-        "port": int(os.environ.get("MQTT_PORT")),
+        "port": int(os.environ.get("MQTT_PORT") or 8081),
         "useSSL": os.environ.get("MQTT_SSL") or True
     }
 
