@@ -118,7 +118,7 @@ $(document).ready(function () {
         console.log("Subscribing to User's Topics: ");
         // smanzel/username/hub_name/port
         MQTT_CLIENT_TOPICS.forEach(topic => {
-            client.subscribe('smanzel/omer/+/+', { qos: 1, onFailure: console.log, onSuccess: console.log });
+            client.subscribe(topic, { qos: 1, onFailure: console.log, onSuccess: console.log });
         })
     }
 
