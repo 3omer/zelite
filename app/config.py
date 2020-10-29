@@ -13,6 +13,7 @@ class Config(object):
     MQTT_SETTINGS = {
         "host": "127.0.0.1",
         "port": 8000,
+        "useSSL": False
     }
 
 
@@ -25,6 +26,7 @@ class ProductionConfig(Config):
     MQTT_SETTINGS = {
         "host": os.environ.get("MQTT_HOST"),
         "port": int(os.environ.get("MQTT_PORT")),
+        "useSSL": os.environ.get("MQTT_SSL") or True
     }
 
 class DevelopmentConfig(Config):

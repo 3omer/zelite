@@ -131,4 +131,4 @@ $(document).ready(function () {
 
     let onFailure = (err) => console.log(err);
     // open connection
-    client.connect({ onSuccess: onConnect, onFailure: onFailure });
+    client.connect({useSSL: MQTT_SETTINGS.useSSL ,onSuccess: onConnect, onFailure: onFailure, reconnect: true });
