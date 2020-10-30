@@ -3,7 +3,7 @@
     {% for device in sensor_devices %}
     <div class="device d-flex m-1 p-1 bg-white rounded-pill shadow-sm" id="{{device.id}}">
      <div class="bg-light m-1 rounded-circle text-center p-2 border border-secondary">
-            <span data-target="sensor" data-topic_name="{{device.topic_name}}" style="font-size: 2rem;line-height: 1.5em;">{{device.value}}</span>
+            <span class="text-small" data-target="sensor" data-topic_name="{{device.topic}}" style="font-size: 1.5rem;line-height: 1.5em;">N/A</span>
         </div>
         <div class="device-details pr-4">
             <div class="device-name" data-target="name">

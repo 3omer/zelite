@@ -45,7 +45,7 @@ class Device(db.Document):
     TYPES = {'switch': 1,
              'sensor': 2}
 
-    key = db.StringField(unique=True, default=lambda: secrets.token_urlsafe(20))
+    key = db.StringField(unique=True, default=lambda: secrets.token_urlsafe(10))
     owner = db.ReferenceField(User, reverse_delete_rule="cascade")
     port = db.IntField(requiered=True)
     name = db.StringField(max_length=50, requiered=True)
