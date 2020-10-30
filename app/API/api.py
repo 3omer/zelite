@@ -11,9 +11,11 @@ from app.API.utils import doesnt_exist
 @app.route("/api/v1/devices", methods=["GET", "POST"])
 @login_required
 def devices():
+    """GET -> user's devices -
+    POST -> Create new device"""
 
     if request.method == "GET":
-        devices = Device.by_owner(current_user)
+        devices = Device.by_owner(current_user.id)
         return jsonify(devices)
 
     if request.method == "POST":
@@ -30,38 +32,26 @@ def devices():
 
         # TODO: check if data is valid
 
-        new_device = Device(name=name, port=port, place=place, d_type=d_type)
+        new_device = Device(name=name, port=port, place=place, d_type=d_type, owner=current_user.id)
         try:
             new_device.save()
         except ValidationError as e:
-            return jsonify(), 403
+            return jsonify(), 400
         return jsonify(), 201
 
 
-@app.route("/api/v1/device", methods=["GET", "PUT", "DELETE"])
+@app.route("/api/v1/device/<key>", methods=["GET", "PUT", "DELETE"])
 @login_required
-def device():
+def device(key):
     """ Access specific device by its key"""
 
-    args = request.get_json()
-    key = args["key"]
-    port = args["port"]
     target_device = Device.by_key(key)
-
     if target_device is None:
         return jsonify(), 404
 
     if request.method == "GET":
         return jsonify(target_device)
 
-    if request.method == "PUT":
-        target_device.name = args['name']
-        target_device.port = args['port']
-        target_device.d_type = args['type']
-        target_device.place = args['place']
-        target_device.save()
-        return jsonify(target_device)
-    
     if request.method == "DELETE":
         target_device.delete()
         return jsonify("deleted"), 204

@@ -1,7 +1,7 @@
 from app import db
 from app.commons import APP_NAME
 from mongoengine.errors import NotUniqueError, ValidationError
-from flask_login import UserMixin
+from flask_login import UserMixin, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 import secrets
 
@@ -46,19 +46,19 @@ class Device(db.Document):
              'sensor': 2}
 
     key = db.StringField(unique=True, default=lambda: secrets.token_urlsafe(10))
-    owner = db.ReferenceField(User, reverse_delete_rule="cascade")
+    owner = db.ReferenceField(User, required=True, reverse_delete_rule="cascade")
     port = db.IntField(requiered=True)
-    name = db.StringField(max_length=50, requiered=True)
-    place = db.StringField(max_length=50, requiered=True)
-    d_type = db.StringField(choices=("switch", "sensor"), requiered=True)
+    name = db.StringField(max_length=50, required=True)
+    place = db.StringField(max_length=50, required=True)
+    d_type = db.StringField(choices=("switch", "sensor"), required=True)
     topic = db.StringField(unique=True)
 
     def save(self, force_insert=False, validate=True, clean=True, write_concern=None, cascade=None, cascade_kwargs=None,
              _refs=None, save_condition=None, signal_kwargs=None, **kwargs):
 
         self.topic = self._generate_topic()
-        self.owner.topics.append(self.topic)
-        self.owner.save()
+        current_user.topics.append(self.topic)
+        current_user.save()
 
         return super().save(force_insert, validate, clean, write_concern, cascade, cascade_kwargs, _refs,
                             save_condition, signal_kwargs, **kwargs)
@@ -70,7 +70,7 @@ class Device(db.Document):
 
     def _generate_topic(self):
         _TOPIC_TEMP = APP_NAME + "/{username}/{key}/{d_type}/{port}"
-        return _TOPIC_TEMP.format(username=self.owner.username, key=self.key, d_type=self.d_type, port=self.port)
+        return _TOPIC_TEMP.format(username=current_user.username, key=self.key, d_type=self.d_type, port=self.port)
 
     @classmethod
     def by_owner(cls, owner):
