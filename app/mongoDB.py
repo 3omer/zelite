@@ -1,6 +1,5 @@
 from app import db
-from app.commons import build_topic_name
-from bson.objectid import ObjectId
+from app.commons import APP_NAME
 from mongoengine.errors import NotUniqueError, ValidationError
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -11,8 +10,7 @@ class User(UserMixin, db.Document):
     email = db.EmailField(max_length=50, unique=True)
     username = db.StringField(max_length=50, unique=True)
     password_hash = db.StringField(max_length=128)
-    topics_acl = db.ListField(db.StringField())
-
+    topics = db.ListField(db.StringField())
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -29,7 +27,6 @@ class User(UserMixin, db.Document):
         new_user.set_password(password)
         new_user.save()
 
-
     @classmethod
     def get_by_email(cls, email):
         return cls.objects(email=email).first()
@@ -41,62 +38,47 @@ class User(UserMixin, db.Document):
     def __repr__(self):
         return "<User {}>".format(self.username)
 
+
 # TODO: private class modify only by HUB-API
 
-class Device(db.EmbeddedDocument):
-
+class Device(db.Document):
     TYPES = {'switch': 1,
              'sensor': 2}
 
-    id = db.ObjectIdField(default=ObjectId)
+    key = db.StringField(unique=True, default=secrets.token_urlsafe(12))
+    owner = db.ReferenceField(User, reverse_delete_rule="cascade")
     port = db.IntField(requiered=True)
     name = db.StringField(max_length=50, requiered=True)
     place = db.StringField(max_length=50, requiered=True)
-    type = db.IntField(choices=(1, 2), requiered=True)
-    value = db.FloatField(default=0.0)
-    is_on = db.BooleanField(default=False)
-    topic_name = db.StringField()
+    d_type = db.StringField(choices=("switch", "sensor"), requiered=True)
+    topic = db.StringField(unique=True)
 
-    def __repr__(self):
-        return "<Device> {}".format(self.name)
+    def save(self, force_insert=False, validate=True, clean=True, write_concern=None, cascade=None, cascade_kwargs=None,
+             _refs=None, save_condition=None, signal_kwargs=None, **kwargs):
 
+        self.topic = self._generate_topic()
+        self.owner.topics.append(self.topic)
+        self.owner.save()
 
-class Hub(db.Document):
-    name = db.StringField(default="HUB-")
-    owner = db.ReferenceField(User)
-    token = db.StringField(max_length=40, default=secrets.token_urlsafe(30))
-    devices = db.EmbeddedDocumentListField(Device)
+        return super().save(force_insert, validate, clean, write_concern, cascade, cascade_kwargs, _refs,
+                            save_condition, signal_kwargs, **kwargs)
 
-    def refresh_token(self):
-        token = secrets.token_urlsafe(30)
-        self.token = token
-        self.save()
-        return self.token
+    def delete(self, signal_kwargs=None, **write_concern):
+        self.owner.topics.remove(self.topic)
+        self.owner.save()
+        return super().delete(signal_kwargs, **write_concern)
 
-    @classmethod
-    def by_id(cls, id):
-        return cls.objects(id=id).first_or_404()
+    def _generate_topic(self):
+        _TOPIC_TEMP = APP_NAME + "/{username}/{key}/{d_type}/{port}"
+        return _TOPIC_TEMP.format(username=self.owner.username, key=self.key, d_type=self.d_type, port=self.port)
 
     @classmethod
     def by_owner(cls, owner):
         return cls.objects(owner=owner).all()
 
     @classmethod
-    def by_token(cls, token):
-        return cls.objects(token=token).first()
+    def by_key(cls, key):
+        return cls.objects(key=key).first()
 
-    def add_device(self, device):
-        """
-        add new device to the hub
-        :param device: Device object """
-        device.topic_name = build_topic_name(self.owner.username, self.name, device.port)
-        self.devices.append(device)
-        self.save()
-        self.owner.topics_acl.append(device.topic_name)
-        self.owner.save()
-
-    def get_device(self, port):
-        """
-        :param port: port number
-        :returns Device connected to a specific port"""
-        return self.devices.filter(port=port).first()
+    def __repr__(self):
+        return "<Device> {}".format(self.name)
