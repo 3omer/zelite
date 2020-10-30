@@ -1,8 +1,5 @@
 <h4><span class="badge badge-dark px-3 mb-2">Sensors</span></h4>
-
 <div class="d-flex flex-wrap mx-0 mx-md-2 device-list" id="sensorList">
-    {% for hub in hubs %}
-    {% set sensor_devices = hub["sensor_devices"] %}
     {% for device in sensor_devices %}
     <div class="device d-flex m-1 p-1 bg-white rounded-pill shadow-sm" id="{{device.id}}">
      <div class="bg-light m-1 rounded-circle text-center p-2 border border-secondary">
@@ -24,6 +21,8 @@
             </div>
         </div>
     </div>
-    {% endfor %}
+    {% else %}
+    <div class="alert alert-info"> You have no sensors yet. Head to Management tab and start adding devices now. </div>
     {% endfor %}
 </div>
+

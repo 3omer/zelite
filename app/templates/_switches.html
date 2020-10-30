@@ -1,10 +1,5 @@
-<h4><span class="badge badge-dark px-3 mb-2">Devices</span></h4>
-{% if not ( hubs[0] and hubs[0]["switch_devices"] ) %}
-<div class="alert alert-info" > You have no registered devices yet. Head to Management tab and start adding devices now. </div>
-{% endif %}
+<h4><span class="badge badge-dark px-3 mb-2">Switches</span></h4>
 <div id="switchList" class="mx-0 mx-md-2">
-    {% for hub in hubs %}
-    {%set switch_devices = hub["switch_devices"]%}
     {% for device in switch_devices %}
     <div class="device  row p-2  m-1 bg-white shadow-sm" id="{{device.id}}">
         <div class="icon col-2 bg-secondary rounded d-flex align-items-center justify-content-center">
@@ -25,12 +20,13 @@
             </div>
         </div>
         <div class="options col d-flex flex-column">
-            <a class="btn action btn-primary" href="{{url_for('deviceaction')}}" data-hub="{{hub.id}}"
+            <a class="btn action btn-primary" href="{{url_for('deviceaction')}}"
                 data-device="{{device.id}}" data-port="{{device.port}}" data-state=""
                data-target="switch" data-is_on="true" data-topic_name="{{device.topic_name}}">LOADING ..</a>
         </div>
 
     </div>
-    {% endfor %}
+    {% else %}
+    <div class="alert alert-info" > You have no devices yet. Head to Management tab and start adding devices now. </div>
     {% endfor %}
 </div>
