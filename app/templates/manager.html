@@ -3,6 +3,14 @@
 {% block content %}
 
 {% include "_option_floating_bar.html" %}
-{% include "_hubs.html" %}
+ <div class="devices-table bg-white  m-1 border">
+        {% include '_table_devices.html' %}
+    </div>
+    <hr>
+    <div class="p-2 m-2">
+        {% include '_form_new_device.html' %}
+    </div>
+
+
 
 {% endblock %}
