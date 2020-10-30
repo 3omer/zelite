@@ -70,11 +70,11 @@
 
     </header>
 
-    <div class="container-fluid bg-light">
-        <div class="row">
+    <div class="container-fluid">
+        <div class="row bg-light">
 
             {% if current_user.is_authenticated %}
-            <nav class="col-md-3 border-right d-none d-md-block bg-light ">
+            <nav class="col-md-3 border-right d-none d-md-block bg-white shadow-sm ">
                 <div class="">
                     <ul class="nav flex-column">
                         <li class="nav-item">
@@ -102,7 +102,7 @@
             </nav>
             {% endif %}
 
-            <main role="main" class="col px-2">
+            <main role="main" class="col px-2 my-2 mx-auto">
                 {% block content%} {% endblock %}           
              </main>
         </div>
