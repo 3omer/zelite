@@ -1,5 +1,5 @@
 <!-- new/edit  device form modal -->
-<div class="modal fade" id="device_modal" role="dialog" tabindex="-1">
+<div class="modal fade" id="new_device_modal" role="dialog" tabindex="-1">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header bg-primary text-light">
@@ -12,32 +12,24 @@
         <form action="{{url_for('devices')}}" id="device_form" method="POST">
           <div class="form-group">
             <label for="name">Device Name</label>
-            <input class="form-control" id="name" name="name"  placeholder="Enter device name" type="text">
+            <input class="form-control" id="name" name="name"  placeholder="Device name" type="text">
           </div>
 
           <div class="form-group">
             <label for="place">Place</label>
-            <input class="form-control" id="place"  name="place" placeholder="Enter device place" type="text">
+            <input class="form-control" id="place"  name="place" placeholder="Device place" type="text">
           </div>
 
-          <div class="form-group">
-            <label for="port">Port</label>
-            <select class="custom-select" id="port" name="port">
-              <option selected>Open this select menu</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="12">12</option>
-              <option value="14">14</option>
-            </select>
-
+        <div class="form-group">
+            <label for="port">Place</label>
+            <input class="form-control" id="port"  name="port" placeholder="Port number" type="number">
           </div>
-
           <div class="form-group">
             <label for="type">Type</label>
             <select class="custom-select" id="type" name="type">
               <option selected>Open this select menu</option>
-              <option value="1">Switch</option>
-              <option value="2">Sensor</option>
+              <option value="switch">Switch</option>
+              <option value="sensor">Sensor</option>
             </select>
 
           </div>
