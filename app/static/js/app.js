@@ -34,47 +34,6 @@ function handleMessage(message) {
     else renderSesnor($ele, message.payloadString);
 }
 
-// MQTT Client-API
-function mqttManager(){
-    let mqttHost = '127.0.0.1';
-    let port = 8000;
-    let clientID = 'smanzel-123';
-    let client = new Paho.MQTT.Client(mqttHost, port, clientID);
-
-    // set callback handlers
-    client.onConnectionLost = (responseObject) => {
-        if (responseObject.errorCode !== 0) {
-            console.log("onConnectionLost:" + responseObject.errorMessage);
-        }
-    };
-
-
-    client.onMessageArrived = (message) => {
-        console.log("onMessageArrived:", message.topic, message.payloadString);
-        handleMessage(message);
-    }
-
-    let onConnect = () => {
-        console.log('---- connected ----');
-        console.log("Subscribing to User's Topics: ");
-        // smanzel/username/hub_name/port
-        client.subscribe('smanzel/omer/+/+', { qos: 1, onFailure: console.log, onSuccess: console.log });
-    }
-
-     client.publish = (topic, payload) => {
-        console.log('----publishing --');
-        console.log('Topic: ', topic, 'Message: ', payload)
-        let message = new Paho.MQTT.Message(payload);
-        message.destinationName = topic;
-        client.send(message);
-        console.log('Published: ', message);
-    }
-
-    let onFailure = (err) => console.log(err);
-    // open connection
-    client.connect({ onSuccess: onConnect, onFailure: onFailure });
-};
-
 
 $(document).ready(function () {
     // clicking action buttons publish events
@@ -133,4 +92,6 @@ $(document).ready(function () {
 
     let onFailure = (err) => console.log(err);
     // open connection
-    client.connect({useSSL: MQTT_SETTINGS.useSSL === "true" ,onSuccess: onConnect, onFailure: onFailure, reconnect: true });
+    if (window.location.pathname.includes("dashboard")){
+        client.connect({useSSL: MQTT_SETTINGS.useSSL === "true" ,onSuccess: onConnect, onFailure: onFailure, reconnect: true });
+    }
