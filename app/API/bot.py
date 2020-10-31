@@ -1,6 +1,6 @@
 from flask import jsonify, request, abort
 from app import app
-from app.mongoDB import Device, User, Hub
+from app.mongoDB import Device, User
 from .utils import turn_on, turn_off, get_state
 from . import BASE_URL
 
@@ -38,16 +38,10 @@ def action():
 
     # get the device then filter them by name
     user = User.objects().first() # this is just for testing
-    hubs = Hub.by_owner(user)
-
+    devices = Device.by_owner(user)
     target_hub = None
     target_device = None
-
-    for hub in hubs:
-        target_device = hub.devices.filter(name=name, place=place).first()
-        if target_device:
-            target_hub = hub
-            break
+    target_device = devices.filter(name=name, place=place).first()
 
     if not target_device:
         return jsonify({"error": "Not found"}), 404
@@ -63,8 +57,6 @@ def action():
         else:
             raise Exception("Unknown Action")
 
-        target_hub.save()
         return jsonify({"data": "success"}), 200
     except:
         return jsonify({"error": "Unknown Action."}), 400
-

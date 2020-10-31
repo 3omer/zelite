@@ -38,8 +38,8 @@ def turn_off_switch(device):
     try:
         publish.single(device.topic, payload="0", qos=1, retain=True,\
                 hostname=hostname, port=1883, client_id="SERVER", \
-                keepalive=5, will=None,auth = {'username':"example_username",\
-                'password':"example_password"}, tls=None, protocol=mqtt.MQTTv311, transport="tcp")
+                keepalive=5, will=None,auth = {'username':"omer",\
+                'password':"ulvuelhk"}, tls=None, protocol=mqtt.MQTTv311, transport="tcp")
         return True
     except Exception as error:
         print("MQTT failed", error)
