@@ -1,7 +1,7 @@
 from functools import wraps
-from flask import request, abort, g, jsonify
-from app.mongoDB import Hub
-
+import paho.mqtt.client as mqtt
+import paho.mqtt.publish as publish
+from flask import current_app as app
 def turn_on(id):
     pass
 
@@ -10,9 +10,6 @@ def turn_off(id):
 
 def get_state(id):
     pass
-
-def doesnt_exist(port=''):
-    abort(404)
 
 
 def token_required(view):
@@ -31,3 +28,19 @@ def token_required(view):
     return decorated_view
 
 
+def turn_off_switch(device):
+    """Publish 0 to MQTT broker
+        :@return: Ture if operation successed
+    """
+    mqtt_seetings = app.config["MQTT_SETTINGS"]
+    hostname = mqtt_seetings["host"]
+    port = mqtt_seetings["port"]
+    try:
+        publish.single(device.topic, payload="0", qos=1, retain=True,\
+                hostname=hostname, port=1883, client_id="SERVER", \
+                keepalive=5, will=None,auth = {'username':"example_username",\
+                'password':"example_password"}, tls=None, protocol=mqtt.MQTTv311, transport="tcp")
+        return True
+    except Exception as error:
+        print("MQTT failed", error)
+        return False
