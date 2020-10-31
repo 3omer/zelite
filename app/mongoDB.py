@@ -54,18 +54,19 @@ class Device(db.Document):
 
     def save(self, force_insert=False, validate=True, clean=True, write_concern=None, cascade=None, cascade_kwargs=None,
              _refs=None, save_condition=None, signal_kwargs=None, **kwargs):
-        # set the topic and save it to user
-        self.topic = self._generate_topic()
-        current_user.topics.append(self.topic)
-        current_user.save()
+    
+        self.topic = self._generate_topic()    
         # tell the broker to set the switch to 0
-        flag = False
+        flag = True
         if self.d_type == "switch":
             flag = turn_off_switch(self) 
         if not flag:
-            raise Exception("MQTT Failure")
+            raise Exception("MQTT Failure")  
+        # update user topics 
+        current_user.topics.append(self.topic)
+        current_user.save()
         return super().save(force_insert, validate, clean, write_concern, cascade, cascade_kwargs, _refs,
-                            save_condition, signal_kwargs, **kwargs)
+                        save_condition, signal_kwargs, **kwargs)
 
     def delete(self, signal_kwargs=None, **write_concern):
         self.owner.topics.remove(self.topic)
