@@ -1,7 +1,7 @@
 var api_url = window.location.origin + "/api/v1";
 var action_url = api_url + "/device/action";
 
-function restMethod(method, url, data, onSuccess) {
+function restMethod(method, url, data, onSuccess, onFailure) {
     console.log("restMethod", { url: url, data: data });
     return $.ajax({
         method: method,
@@ -10,7 +10,7 @@ function restMethod(method, url, data, onSuccess) {
         dataType: "JSON",
         data: data,
         success: onSuccess,
-        failure: onFailure
+        error: onFailure
     });
 }
 
@@ -95,12 +95,19 @@ $(document).ready(function () {
         var key = $(event.target).data("key");
         var url = api_url + "/device/" + key
         console.log("Delete URL", url);
-        restMethod("DELETE", url)
-            .done(function (result) {
-                console.log("Delete operation");
-                console.log(result);
-                location.reload();
-            });
+        restMethod("DELETE",
+         url, 
+         {}, // no data needed
+        (res) => {
+            console.log("Delete Device Res", res);
+            // console.log(res);
+            location.reload();
+        },
+        (err => {
+            console.error("Delete Device Failed", err);
+        })
+        )
+    
     });
 
     console.log('main loadded');
