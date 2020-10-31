@@ -2,7 +2,6 @@ from flask import jsonify, request, Response, abort
 from app import app
 from flask_login import login_required, current_user
 from app.mongoDB import Device, User, ValidationError
-from app.API.utils import doesnt_exist
 
 """ These API are meant to be accessed from the web client 'Dashboard' """
 # : These API are authenticated with a session, Should authenticate with key
@@ -30,13 +29,13 @@ def devices():
         place = args.get('place')
         d_type = args.get('type')
 
-        # TODO: check if data is valid
-
         new_device = Device(name=name, port=port, place=place, d_type=d_type, owner=current_user.id)
         try:
             new_device.save()
         except ValidationError as e:
             return jsonify(), 400
+        except Exception as e:
+            return jsonify(), 500
         return jsonify(), 201
 
 
