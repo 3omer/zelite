@@ -1,5 +1,6 @@
 from app import db
 from app.commons import APP_NAME
+from app.API.utils import turn_off_switch
 from mongoengine.errors import NotUniqueError, ValidationError
 from flask_login import UserMixin, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -39,8 +40,6 @@ class User(UserMixin, db.Document):
         return "<User {}>".format(self.username)
 
 
-# TODO: private class modify only by HUB-API
-
 class Device(db.Document):
     TYPES = {'switch': 1,
              'sensor': 2}
@@ -55,11 +54,16 @@ class Device(db.Document):
 
     def save(self, force_insert=False, validate=True, clean=True, write_concern=None, cascade=None, cascade_kwargs=None,
              _refs=None, save_condition=None, signal_kwargs=None, **kwargs):
-
+        # set the topic and save it to user
         self.topic = self._generate_topic()
         current_user.topics.append(self.topic)
         current_user.save()
-
+        # tell the broker to set the switch to 0
+        flag = False
+        if self.d_type == "switch":
+            flag = turn_off_switch(self) 
+        if not flag:
+            raise Exception("MQTT Failure")
         return super().save(force_insert, validate, clean, write_concern, cascade, cascade_kwargs, _refs,
                             save_condition, signal_kwargs, **kwargs)
 
