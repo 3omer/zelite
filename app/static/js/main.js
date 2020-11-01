@@ -88,14 +88,14 @@ $(document).ready(function () {
             }));
     });
 
-    var delete_device_btn = $(".delete_device");
-    delete_device_btn.on("click", function (event) {
+    var btnDeleteDevice = $("[data-target=btnDeleteDevice]");
+    btnDeleteDevice.on("click", function (event) {
+        console.log("btnDeleteDevice")
         event.preventDefault();
-        var url = api_url + "/device"
-        var hub_id = $(this).data("hub_id");
-        var port = $(this).data("port");
-        var data = JSON.stringify({ "hub_id": hub_id, "port": port });
-        restMethod("DELETE", url, data)
+        var key = $(event.target).data("key");
+        var url = api_url + "/device/" + key
+        console.log("Delete URL", url);
+        restMethod("DELETE", url)
             .done(function (result) {
                 console.log("Delete operation");
                 console.log(result);
