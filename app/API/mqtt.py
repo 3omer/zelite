@@ -1,4 +1,4 @@
-from flask import jsonify, request, abort
+from flask import jsonify, request, abort, Response
 from app import app
 from app.mongoDB import Device, User
 
@@ -11,19 +11,19 @@ def authMqtt():
     acc      = request.form.get('acc')
 
     if username == password:
-        return "", 200
-    return "", 400
+        return Response("", 200)
+    return abort(400)
 
-@app.route("/api/v1/mqtt/superuser")
+@app.route("/api/v1/mqtt/superuser", methods=["POST"])
 def superuser():
     username = request.form.get('username')
     password = request.form.get('password')
 
     if username == "admin":
-        return "", 200
-    return "", 400
+        return Response("", 200)
+    return abort(400)
 
-@app.route("/api/v1/mqtt/acl")
+@app.route("/api/v1/mqtt/acl", methods=["POST"])
 def acl():
 
     username = request.form.get('username')
@@ -31,4 +31,4 @@ def acl():
     clientid = request.form.get('clientid')
     acc      = request.form.get('acc') # 1 == SUB, 2 == PUB
 
-    return "", 200
+    return Response("", 200)

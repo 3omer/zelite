@@ -33,7 +33,7 @@ def set_switch_state(device, state):
         publish.single(device.topic, payload=state, qos=1, retain=True,\
                 hostname=hostname, port=1883, client_id="SERVER", \
                 keepalive=5, will=None,auth = {'username':"omer",\
-                'password':"ulvuelhk"}, tls=None, protocol=mqtt.MQTTv311, transport="tcp")
+                'password':"omer"}, tls=None, protocol=mqtt.MQTTv311, transport="tcp")
         return True
     except Exception as error:
         print("MQTT failed", error)
