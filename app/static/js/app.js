@@ -93,5 +93,11 @@ $(document).ready(function () {
     let onFailure = (err) => console.log(err);
     // open connection
     if (window.location.pathname.includes("dashboard")){
-        client.connect({useSSL: MQTT_SETTINGS.useSSL === "true" ,onSuccess: onConnect, onFailure: onFailure, reconnect: true });
+        client.connect({userName: "omer",
+        password: "omer",
+        useSSL: MQTT_SETTINGS.useSSL === "true" ,
+        cleanSession: false,
+        onSuccess: onConnect, 
+        onFailure: onFailure, 
+        reconnect: true });
     }
