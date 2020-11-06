@@ -1,7 +1,7 @@
 from flask import jsonify, request, abort
 from app import app
 from app.mongoDB import Device, User
-from .utils import turn_on, turn_off, get_state
+from .utils import set_switch_state, read_sensor
 from . import BASE_URL
 
 BOT_API = BASE_URL.format("/bot")
@@ -39,7 +39,6 @@ def action():
     # get the device then filter them by name
     user = User.objects().first() # this is just for testing
     devices = Device.by_owner(user)
-    target_hub = None
     target_device = None
     target_device = devices.filter(name=name, place=place).first()
 
@@ -47,16 +46,22 @@ def action():
         return jsonify({"error": "Not found"}), 404
 
     if action == "read":
-        return jsonify({"data": target_device.value})
+        val = read_sensor(target_device)
+        if val :
+            return jsonify({"data": val})
+        return jsonify(), 500
 
-    try:
-        if action == "turn_on":
-            target_device.is_on = True
-        elif action == "turn_off":
-            target_device.is_on = False
-        else:
-            raise Exception("Unknown Action")
 
-        return jsonify({"data": "success"}), 200
-    except:
+    flag = False
+    if action == "turn_on":
+        flag = set_switch_state(target_device, "1")
+    elif action == "turn_off":
+        flag = set_switch_state(target_device, "0")
+
+    else:
         return jsonify({"error": "Unknown Action."}), 400
+    
+    if flag:
+        return jsonify({"data": "success"}), 200
+    return jsonify(""), 500
+        

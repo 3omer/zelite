@@ -5,16 +5,6 @@ import paho.mqtt.subscribe as subscribe
 from flask import current_app as app
 
 
-def turn_on(id):
-    pass
-
-def turn_off(id):
-    pass
-
-def get_state(id):
-    pass
-
-
 def token_required(view):
     """Inject apikey from header X-Api-Key into the global object 'g' as token
     @:param view: flask view function
