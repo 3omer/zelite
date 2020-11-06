@@ -45,7 +45,7 @@
                                 class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item border-bottom">
-                        <a class="nav-link" href="#">Bot</a>
+                        <a class="nav-link" href="{{url_for('bot')}}">Bot</a>
                     </li>
                     <li class="nav-item border-bottom">
                         <a class="nav-link" href="{{url_for('manager')}}">manager</a>
@@ -82,7 +82,7 @@
                     Dashboard
                 </a>
                 <a href="{{url_for('manager')}}" class="list-group-item list-group-item-action">Management</a>
-                <a href="#" class="list-group-item list-group-item-action">Bot</a>
+                <a href="{{url_for('bot')}}" class="list-group-item list-group-item-action">Bot</a>
             </div>
         </nav>
         {% endif %}
@@ -112,6 +112,7 @@
 <!--main src-->
 <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 {% endif %}
+
 </body>
 
 

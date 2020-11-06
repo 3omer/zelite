@@ -1,0 +1,23 @@
+{% extends 'base_template.html' %}
+
+{% block content %}
+
+<div id="webchat"></div>
+<script src="{{ url_for('static', filename='js/webchat.min.js') }}"></script>
+<div id="#webchat"></div>
+<script>
+  WebChat.default.init({
+    selector: "#webchat",
+    initPayload: "/restart",
+    customData: {user_id: "user123"}, // arbitrary custom data. Stay minimal as this will be added to the socket
+    socketUrl: "http://localhost:5005",
+    socketPath: "/socket.io/",
+    title: "Smanzel Bot",
+    subtitle: "I help you to manage your home devices",
+    params: {"storage": "session"} // can be set to "local"  or "session". details in storage section.
+  });
+
+  WebChat.open();
+</script>
+
+{% endblock %}

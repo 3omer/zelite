@@ -11,7 +11,7 @@ class Config(object):
     }
 
     MQTT_SETTINGS = {
-        "host": "127.0.0.1",
+        "host": "192.168.43.2",
         "port": 8000,
         "useSSL": False
     }

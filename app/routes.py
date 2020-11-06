@@ -25,3 +25,10 @@ def dashboard():
 def manager():
     devices = Device.by_owner(current_user.id)
     return render_template('manager.html', devices=devices)
+
+
+@app.route('/bot')
+@login_required
+def bot():
+    return render_template('bot.html')
+
