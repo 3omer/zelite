@@ -1,6 +1,6 @@
 from app import db
 from app.commons import APP_NAME
-from app.API.utils import turn_off_switch
+from app.API.utils import set_switch_state
 from mongoengine.errors import NotUniqueError, ValidationError
 from flask_login import UserMixin, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -59,7 +59,7 @@ class Device(db.Document):
         # tell the broker to set the switch to 0
         flag = True
         if self.d_type == "switch":
-            flag = turn_off_switch(self) 
+            flag = set_switch_state(self, "0") 
         if not flag:
             raise Exception("MQTT Failure")  
         # update user topics 
