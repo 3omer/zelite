@@ -55,3 +55,8 @@ def read_sensor(device):
     except Exception as error:
         print("MQTT failed", error)
         return None
+
+def validate_user_mqtt(user, username, password):
+    if user.mqtt_username == username and user.mqtt_password == password:
+        return True
+    return False

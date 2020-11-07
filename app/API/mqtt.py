@@ -1,8 +1,23 @@
-from flask import jsonify, request, abort, Response
+from flask import jsonify, request, abort, Response, redirect, url_for
+from flask_login import current_user, login_required
 from app import app
 from app.mongoDB import Device, User
+from app.API.utils import validate_user_mqtt
 
 # api for mqtt authentication
+@login_required
+@app.route("/api/v1/mqtt/create", methods=["POST"])
+def mqtt_credentials():
+    """create MQTT credentials """
+    username = request.form.get('username')
+    password = request.form.get('password')
+    
+    if current_user:
+        current_user.mqtt_username = username
+        current_user.mqtt_password = password
+        current_user.save()
+    return redirect(url_for("manager"))
+
 @app.route("/api/v1/mqtt/auth", methods=["POST"])
 def authMqtt():
     username = request.form.get('username')
@@ -10,7 +25,8 @@ def authMqtt():
     topic    = request.form.get('topic')
     acc      = request.form.get('acc')
 
-    if username == password:
+    user = User.get_by_username(username)
+    if user and validate_user_mqtt(user, username, password):
         return Response("", 200)
     return abort(400)
 
@@ -19,7 +35,7 @@ def superuser():
     username = request.form.get('username')
     password = request.form.get('password')
 
-    if username == "admin":
+    if username == "omer" and password == "ulvuelhk":
         return Response("", 200)
     return abort(400)
 
@@ -31,4 +47,9 @@ def acl():
     clientid = request.form.get('clientid')
     acc      = request.form.get('acc') # 1 == SUB, 2 == PUB
 
-    return Response("", 200)
+    user = User.get_by_username(username)
+    if user and (topic in user.topics):
+        return Response("", 200)
+    return abort(400)
+    
+            
