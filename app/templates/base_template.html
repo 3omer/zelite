@@ -104,6 +104,9 @@
         const MQTT_SETTINGS = {{ config.MQTT_SETTINGS|tojson }};
         console.log("--- MQTT Config: ---", MQTT_SETTINGS);
         const MQTT_CLIENT_TOPICS = {{ current_user.topics |tojson }};
+        const MQTT_CLIENT_USERNAME = "{{ current_user.mqtt_username}}" ;
+        const MQTT_CLIENT_PASSWORD = "{{ current_user.mqtt_password}}" ;
+        const MQTT_CLIENT_ID = "{{ current_user.id }}";
 
 </script>
 <!--Paho Client-->

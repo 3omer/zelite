@@ -56,7 +56,7 @@ $(document).ready(function () {
     */
     let mqttHost = MQTT_SETTINGS.host;
     let port = MQTT_SETTINGS.port;
-    let clientID = 'smanzel-123';
+    let clientID = MQTT_CLIENT_ID;
     let client = new Paho.MQTT.Client(mqttHost, port, clientID);
 
     // set callback handlers
@@ -81,20 +81,11 @@ $(document).ready(function () {
         })
     }
 
-//    let publish = (topic, payload) => {
-//        console.log('----publishing --');
-//        console.log('Topic: ', topic, 'Message: ', payload)
-//        let message = new Paho.MQTT.Message(payload);
-//        message.destinationName = topic;
-//        client.send(message, 1, true);
-//        console.log('Published: ', message);
-//    }
-
     let onFailure = (err) => console.log(err);
     // open connection
     if (window.location.pathname.includes("dashboard")){
-        client.connect({userName: "omer",
-        password: "omer",
+        client.connect({userName: MQTT_CLIENT_USERNAME,
+        password: MQTT_CLIENT_PASSWORD,
         useSSL: MQTT_SETTINGS.useSSL === "true" ,
         cleanSession: false,
         onSuccess: onConnect, 
