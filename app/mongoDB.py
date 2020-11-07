@@ -11,6 +11,8 @@ class User(UserMixin, db.Document):
     email = db.EmailField(max_length=50, unique=True)
     username = db.StringField(max_length=50, unique=True)
     password_hash = db.StringField(max_length=128)
+    mqtt_username = db.StringField(max_length=128)
+    mqtt_password = db.StringField(max_length=128)
     topics = db.ListField(db.StringField())
 
     def set_password(self, password):
@@ -31,6 +33,10 @@ class User(UserMixin, db.Document):
     @classmethod
     def get_by_email(cls, email):
         return cls.objects(email=email).first()
+    
+    @classmethod
+    def get_by_username(cls, username):
+        return cls.objects(username=username).first()
 
     @classmethod
     def get_by_id(cls, id):
