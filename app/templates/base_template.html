@@ -107,6 +107,9 @@
         const MQTT_CLIENT_USERNAME = "{{ current_user.mqtt_username}}" ;
         const MQTT_CLIENT_PASSWORD = "{{ current_user.mqtt_password}}" ;
         const MQTT_CLIENT_ID = "{{ current_user.id }}";
+        let chat_session = {};
+  chat_session.session_id = MQTT_CLIENT_ID;
+  sessionStorage.chat_session = JSON.stringify(chat_session)
 
 </script>
 <!--Paho Client-->
