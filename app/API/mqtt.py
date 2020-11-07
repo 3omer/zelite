@@ -2,7 +2,7 @@ from flask import jsonify, request, abort, Response, redirect, url_for
 from flask_login import current_user, login_required
 from app import app
 from app.mongoDB import Device, User
-from app.API.utils import validate_user_mqtt
+from app.API.utils import validate_user_mqtt, is_mqtt_admin
 
 # api for mqtt authentication
 @login_required
@@ -26,6 +26,8 @@ def authMqtt():
     acc      = request.form.get('acc')
 
     user = User.get_by_username(username)
+    if is_mqtt_admin(username, password):
+        return Response("", 200)
     if user and validate_user_mqtt(user, username, password):
         return Response("", 200)
     return abort(400)
@@ -35,7 +37,7 @@ def superuser():
     username = request.form.get('username')
     password = request.form.get('password')
 
-    if username == "omer" and password == "ulvuelhk":
+    if username == "admin" and password == "admin": # these are just default .. change them
         return Response("", 200)
     return abort(400)
 
@@ -46,6 +48,9 @@ def acl():
     topic    = request.form.get('topic')
     clientid = request.form.get('clientid')
     acc      = request.form.get('acc') # 1 == SUB, 2 == PUB
+
+    if username == "admin":
+        return Response("", 200)
 
     user = User.get_by_username(username)
     if user and (topic in user.topics):
