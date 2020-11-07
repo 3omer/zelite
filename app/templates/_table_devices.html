@@ -4,6 +4,7 @@
         <th scope="col">Port</th>
         <th scope="col">Name</th>
         <th scope="col">Place</th>
+        <th scope="col">Topic</th>
         <th scope="col"></th>
 
       </tr>
@@ -11,9 +12,11 @@
     {% for device in devices %}
     <tbody>
       <tr>
-        <th scope="row">{{device.port}}</th>
+        <th>{{device.port}}</th>
         <td>{{device.name}}</td>
         <td>{{device.place}}</td>
+        <td><input class="form-control" type="text" value="{{device.topic}}"  readonly></td>
+        
         <td><button id="" class="btn btn-sm btn-danger" data-target="btnDeleteDevice"
           data-key="{{device.key}}">Delete</button></td>
       </tr>
