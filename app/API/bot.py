@@ -29,6 +29,7 @@ def action():
     """
 
     data = request.get_json()
+    user_id = data.get("user_id")
     try:
         name = data.get("name")
         place = data.get("place")
@@ -36,8 +37,11 @@ def action():
     except Exception as e:
         return jsonify({"error": "Provide a name, a place and an action."}), 400
 
-    # get the device then filter them by name
     user = User.objects().first() # this is just for testing
+    user = User.get_by_id(user_id)
+    print("user", user.id, "req_param", user_id)
+    
+    # get the device then filter them by name
     devices = Device.by_owner(user)
     target_device = None
     target_device = devices.filter(name=name, place=place).first()
@@ -63,5 +67,5 @@ def action():
     
     if flag:
         return jsonify({"data": "success"}), 200
-    return jsonify(""), 500
+    return jsonify("Internal Error"), 500
         
