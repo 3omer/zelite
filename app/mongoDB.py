@@ -42,6 +42,12 @@ class User(UserMixin, db.Document):
     def get_by_id(cls, id):
         return cls.objects(id=id).first()
 
+    @classmethod
+    def get_by_mqtt_username(cls, mqtt_username):
+        return cls.objects(mqtt_username=mqtt_username).first()
+
+    
+    
     def __repr__(self):
         return "<User {}>".format(self.username)
 

@@ -25,7 +25,7 @@ def authMqtt():
     topic    = request.form.get('topic')
     acc      = request.form.get('acc')
 
-    user = User.get_by_username(username)
+    user = User.get_by_mqtt_username(username)
     if is_mqtt_admin(username, password):
         return Response("", 200)
     if user and validate_user_mqtt(user, username, password):
@@ -52,7 +52,7 @@ def acl():
     if username == "admin":
         return Response("", 200)
 
-    user = User.get_by_username(username)
+    user = User.get_by_mqtt_username(username)
     if user and (topic in user.topics):
         return Response("", 200)
     return abort(400)
