@@ -1,10 +1,11 @@
 from flask import request, redirect, url_for, render_template, flash
 from app import app, login_manager
 from flask_login import login_required, current_user, login_user, logout_user
-from app.mongoDB import User, NotUniqueError
+from app.mongoDB import User, NotUniqueError, ValidationError
 import logging
 import re
 log = logging.getLogger()
+
 
 @login_manager.user_loader
 def load_user(id):
@@ -19,9 +20,11 @@ def register():
             flash("Registered Successfully", "success")
             return redirect(url_for("login"))
         except NotUniqueError as e:
-            log.error(e)
+            # log.error(e)
             filed = "Username" if re.search("username", str(e)) else "Email"
             flash("This {} Already Exist, Try another one".format(filed), "error")
+        except ValidationError as e:
+            flash("Invalid data", "error")
 
     return render_template("register.html")
 
