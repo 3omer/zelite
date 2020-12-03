@@ -36,11 +36,11 @@ def login():
         email = request.form.get('email')
         password = request.form.get('password')
         user = User.get_by_email(email)
-        if user is not None and user.check_password(password):
+        if user and user.check_password(password):
             flag = login_user(user)
             return redirect(url_for('dashboard'))
         else:
-            flash('Email or Password is inncorect.')
+            flash('Email or Password is incorrect.')
     return render_template('login.html')
 
 
