@@ -73,7 +73,7 @@
 </header>
 
 <div class="container-fluid">
-    <div class="row bg-light">
+    <div class="row bg-light vh-100">
 
         {% if current_user.is_authenticated %}
         <nav class="col-md-3 p-0 border-right d-none d-md-block bg-white vh-10 shadow-sm ">
@@ -87,7 +87,7 @@
         </nav>
         {% endif %}
 
-        <main role="main" class="col col-md-8 px-2 my-2 mx-auto">
+        <main role="main" class="col col-md-7 col-lg-6 px-2 my-2 mx-auto">
             {% block content%} {% endblock %}
         </main>
     </div>
