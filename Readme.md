@@ -6,8 +6,7 @@ The actual messaging between end devices "IoT" and the front end is an MQTT conn
 
 ## Live Demo:
 
- [on heroku](https://smanzel.herokuapp.com/)
-> heroku free container does not support mqtt
+ [on heroku](https://zelite.herokuapp.com/)
 
 
 ## RESET-API
