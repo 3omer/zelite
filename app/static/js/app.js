@@ -83,7 +83,7 @@ $(document).ready(function () {
 
     let onFailure = (err) => console.log(err);
     // open connection
-    if (window.location.pathname === "dashboard" || window.location.pathname === "/" ){
+    if (window.location.pathname === "/dashboard" || window.location.pathname === "/" ){
         client.connect({userName: MQTT_CLIENT_USERNAME,
         password: MQTT_CLIENT_PASSWORD,
         useSSL: MQTT_SETTINGS.useSSL === "true" ,
