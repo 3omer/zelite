@@ -8,28 +8,31 @@ from flask_jwt_extended import create_access_token
 # : These API are authenticated with a session, Should authenticate with key
 
 
-@app.route("/api/login", methods=["POST"])
+@app.route("/api/v1/login", methods=["POST"])
 def jwt_login():
-    username, password = request.get_json() or (None, None)
+    data = request.get_json()
+    email = data.get("email", None)
+    password = data.get("password", None)
+    print(email, password)
     res = {}
-    if not username:
-        res.error = "Missing username parameter"
+    if not email:
+        res["error"] = "Missing email parameter"
         return jsonify(res), 400
     if not password:
-        res.error = "Missing password parameter"
+        res["error"] = "Missing password parameter"
         return jsonify(res), 400
     
-    if not User.check_password(username, password):
-        res.error = "Invalid credentials"
+    user = User.get_by_email(email)
+    if not ( user and user.check_password(password)):
+        res["error"] = "Invalid credentials"
         return jsonify(res), 401
     
-    user = User.get_by_username(username)
-    if not user:
-        res.error = "User not found"
-        return jsonify(res), 404
-    
-    token = create_access_token(identity=username)
-    return jsonify(token)
+    token = create_access_token(identity= {
+        "username": user.username,
+        "id": str(user.id)
+    })
+    res["token"] = token
+    return jsonify(res)
     
 
 

@@ -16,6 +16,7 @@ else:
 db = MongoEngine(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
+jwt = JWTManager(app)
 
 
 from app import routes, auth, mongoDB
