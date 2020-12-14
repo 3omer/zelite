@@ -1,10 +1,16 @@
 from flask import request, redirect, url_for, render_template, flash
-from app import app, login_manager
+from app import app, login_manager, jwt
 from flask_login import login_required, current_user, login_user, logout_user
-from app.mongoDB import User, NotUniqueError, ValidationError
+from app.mongoDB import User, RevokedToken, NotUniqueError, ValidationError
 import logging
 import re
 log = logging.getLogger()
+
+# initialize jwt loader
+@jwt.token_in_blacklist_loader
+def token_black_listed_loader(dec_token):
+    jti = dec_token["jti"]
+    return RevokedToken.is_blacklisted(jti)
 
 
 @login_manager.user_loader

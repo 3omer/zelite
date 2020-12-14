@@ -9,15 +9,16 @@ import secrets
 
 
 class RevokedToken(db.Document):
-    token = db.StringField(unique=True)
+    jti = db.StringField(unique=True)
 
     @classmethod
-    def is_blacklisted(cls, token):
-        return cls.objects(token=token).first() != None
+    def is_blacklisted(cls, jti):
+        return cls.objects(jti=jti).first() != None
 
     @classmethod
-    def add(cls, token):
-        return cls(token=token).save()
+    def add(cls, dec_token):
+        jti = dec_token["jti"]
+        return cls(jti=jti).save()
 
 
 class User(db.Document):

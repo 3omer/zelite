@@ -1,8 +1,8 @@
 from flask import jsonify, request, Response, abort
 from app import app
 from flask_login import login_required, current_user
-from app.mongoDB import Device, User, ValidationError
-from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+from app.mongoDB import Device, User, RevokedToken, ValidationError
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity, get_raw_jwt
 
 """ These API are meant to be accessed from the web client 'Dashboard' """
 # : These API are authenticated with a session, Should authenticate with key
@@ -30,6 +30,14 @@ def jwt_login():
     token = user.generate_token()
     res["token"] = token
     return jsonify(res)
+
+
+@app.route("/api/v1/logout", methods=["POST"])
+@jwt_required
+def token_revoke():
+    dec_token = get_raw_jwt()
+    RevokedToken.add(dec_token)
+    return jsonify(dec_token), 200
     
 
 @app.route("/api/v1/devices", methods=["GET", "POST"])
@@ -66,7 +74,7 @@ def devices():
 
 
 @app.route("/api/v1/device/<key>", methods=["GET", "PUT", "DELETE"])
-@login_required
+@jwt_required
 def device(key):
     """ Access specific device by its key"""
 
@@ -83,25 +91,11 @@ def device(key):
         
 
 @app.route("/api/v1/device/action", methods=["PUT"])
-@login_required
+@jwt_required
 def deviceaction():
     """ Turn on / Turn off device from the Dashboard
     Example : PUT -d '{hub_id: 123abc, port: 10, is_on: True}'
     :return 200
     TODO return updated code with no body
     """
-
-    args = request.get_json()
-    hub_id = args["hub_id"]
-    port = args['port']
-    is_on = args['is_on']
-    hub = {} # Hub.by_id(hub_id)
-    target_device = {} # hub.get_device(port)
-
-    if target_device is None:
-        return doesnt_exist(port=port)
-    target_device.is_on = is_on
-    hub.save()
-    # convert object id to string
-    # target_device.id = str(target_device.id)
-    return target_device.to_json()
+    return jsonify("Soon"), 404
