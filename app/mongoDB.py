@@ -2,6 +2,7 @@ from app import db
 from app.commons import APP_NAME
 from app.API.utils import set_switch_state
 from mongoengine.errors import NotUniqueError, ValidationError
+from flask_jwt_extended import create_access_token
 from flask_login import UserMixin, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 import secrets
@@ -14,12 +15,24 @@ class User(UserMixin, db.Document):
     mqtt_username = db.StringField(max_length=128)
     mqtt_password = db.StringField(max_length=128)
     topics = db.ListField(db.StringField())
+    tokens = db.ListField()
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+    
+    def generate_token(self):
+        token = create_access_token(identity= {
+            "username": self.username,
+            "id": str(self.id)
+        })
+        
+        self.tokens.append({ "token": token })
+        self.save()
+        return token
+
 
     @classmethod
     def register(cls, form):
