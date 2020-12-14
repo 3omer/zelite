@@ -2,9 +2,39 @@ from flask import jsonify, request, Response, abort
 from app import app
 from flask_login import login_required, current_user
 from app.mongoDB import Device, User, ValidationError
+from flask_jwt_extended import create_access_token
 
 """ These API are meant to be accessed from the web client 'Dashboard' """
 # : These API are authenticated with a session, Should authenticate with key
+
+
+@app.route("/api/login", methods=["POST"])
+def jwt_login():
+    username, password = request.get_json() or (None, None)
+    res = {}
+    if not username:
+        res.error = "Missing username parameter"
+        return jsonify(res), 400
+    if not password:
+        res.error = "Missing password parameter"
+        return jsonify(res), 400
+    
+    if not User.check_password(username, password):
+        res.error = "Invalid credentials"
+        return jsonify(res), 401
+    
+    user = User.get_by_username(username)
+    if not user:
+        res.error = "User not found"
+        return jsonify(res), 404
+    
+    token = create_access_token(identity=username)
+    return jsonify(token)
+    
+
+
+
+
 
 
 @app.route("/api/v1/devices", methods=["GET", "POST"])

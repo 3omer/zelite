@@ -5,6 +5,7 @@ class Config(object):
     DEBUG = False
     TESTING = False
     SECRET_KEY = os.environ.get('SECCRET_KEY') or 'admin'
+    JWT_SECRET_KEY = os.environ.get("JWT_KEY") or "admin"
 
     MONGODB_SETTINGS = {
         "db": os.environ.get("MONGODB_NAME") or "smanzel_dev",
