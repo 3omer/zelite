@@ -8,6 +8,18 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import secrets
 
 
+class RevokedToken(db.Document):
+    token = db.StringField(unique=True)
+
+    @classmethod
+    def is_blacklisted(cls, token):
+        return cls.objects(token=token).first() != None
+
+    @classmethod
+    def add(cls, token):
+        return cls(token=token).save()
+
+
 class User(db.Document):
     email = db.EmailField(max_length=50, unique=True)
     username = db.StringField(max_length=50, unique=True)
