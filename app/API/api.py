@@ -2,7 +2,7 @@ from flask import jsonify, request, Response, abort
 from app import app
 from flask_login import login_required, current_user
 from app.mongoDB import Device, User, ValidationError
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 
 """ These API are meant to be accessed from the web client 'Dashboard' """
 # : These API are authenticated with a session, Should authenticate with key
@@ -27,27 +27,20 @@ def jwt_login():
         res["error"] = "Invalid credentials"
         return jsonify(res), 401
     
-    token = create_access_token(identity= {
-        "username": user.username,
-        "id": str(user.id)
-    })
+    token = user.generate_token()
     res["token"] = token
     return jsonify(res)
     
 
-
-
-
-
-
 @app.route("/api/v1/devices", methods=["GET", "POST"])
-@login_required
+@jwt_required
 def devices():
     """GET -> user's devices -
     POST -> Create new device"""
-
+    payload = get_jwt_identity()
+    user_id = payload["id"]
     if request.method == "GET":
-        devices = Device.by_owner(current_user.id)
+        devices = Device.by_owner(user_id)
         return jsonify(devices)
 
     if request.method == "POST":
