@@ -1,1 +1,1 @@
-APP_NAME = "smanzel"
+APP_NAME = "zelite"

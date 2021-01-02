@@ -1,6 +1,5 @@
 from flask import jsonify, request, Response, abort
 from app import app
-from flask_login import login_required, current_user
 from app.mongoDB import Device, User, RevokedToken, ValidationError
 from flask_jwt_extended import jwt_required, get_jwt_identity
     
@@ -14,7 +13,7 @@ def devices():
     user_id = payload["id"]
     if request.method == "GET":
         devices = Device.by_owner(user_id)
-        return jsonify(devices)
+        return jsonify([device.serialize() for device in devices])
 
     if request.method == "POST":
         """Create new device. Example:
@@ -27,18 +26,19 @@ def devices():
         name = args.get('name')
         place = args.get('place')
         d_type = args.get('type')
-
-        new_device = Device(name=name, port=port, place=place, d_type=d_type, owner=current_user.id)
+        owner = User.get_by_id(user_id)
+        new_device = Device(name=name, port=port, place=place, d_type=d_type, owner=owner)
         try:
             new_device.save()
         except ValidationError as e:
-            return jsonify(), 400
+            return jsonify({"error": "Invalid data"}), 400
         except Exception as e:
-            return jsonify(), 500
-        return jsonify(), 201
+            print(e)
+            return jsonify({"error": "Unexpected error has occured"}), 500
+        return jsonify(new_device.serialize()), 201
 
 
-@app.route("/api/v1/device/<key>", methods=["GET", "PUT", "DELETE"])
+@app.route("/api/v1/devices/<key>", methods=["GET", "PUT", "DELETE"])
 @jwt_required
 def device(key):
     """ Access specific device by its key"""
