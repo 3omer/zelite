@@ -2,42 +2,7 @@ from flask import jsonify, request, Response, abort
 from app import app
 from flask_login import login_required, current_user
 from app.mongoDB import Device, User, RevokedToken, ValidationError
-from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity, get_raw_jwt
-
-""" These API are meant to be accessed from the web client 'Dashboard' """
-# : These API are authenticated with a session, Should authenticate with key
-
-
-@app.route("/api/v1/login", methods=["POST"])
-def jwt_login():
-    data = request.get_json()
-    email = data.get("email", None)
-    password = data.get("password", None)
-    print(email, password)
-    res = {}
-    if not email:
-        res["error"] = "Missing email parameter"
-        return jsonify(res), 400
-    if not password:
-        res["error"] = "Missing password parameter"
-        return jsonify(res), 400
-    
-    user = User.get_by_email(email)
-    if not ( user and user.check_password(password)):
-        res["error"] = "Invalid credentials"
-        return jsonify(res), 401
-    
-    token = user.generate_token()
-    res["token"] = token
-    return jsonify(res)
-
-
-@app.route("/api/v1/logout", methods=["POST"])
-@jwt_required
-def token_revoke():
-    dec_token = get_raw_jwt()
-    RevokedToken.add(dec_token)
-    return jsonify(dec_token), 200
+from flask_jwt_extended import jwt_required, get_jwt_identity
     
 
 @app.route("/api/v1/devices", methods=["GET", "POST"])

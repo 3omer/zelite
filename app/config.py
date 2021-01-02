@@ -1,5 +1,5 @@
 import os
-
+from datetime import timedelta
 
 class Config(object):
     DEBUG = False
@@ -7,10 +7,10 @@ class Config(object):
     SECRET_KEY = os.environ.get('SECCRET_KEY') or 'admin'
     JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY") or "admin"
     JWT_BLACKLIST_ENABLED = True
-    JWT_BLACKLIST_ENABLED = True
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(days=15)
 
     MONGODB_SETTINGS = {
-        "db": os.environ.get("MONGODB_NAME") or "smanzel_dev",
+        "db": os.environ.get("MONGODB_NAME") or "zelite_dev",
     }
 
     MQTT_SETTINGS = {

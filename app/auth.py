@@ -1,16 +1,10 @@
 from flask import request, redirect, url_for, render_template, flash
-from app import app, login_manager, jwt
+from app import app, login_manager
 from flask_login import login_required, current_user, login_user, logout_user
 from app.mongoDB import User, RevokedToken, NotUniqueError, ValidationError
 import logging
 import re
 log = logging.getLogger()
-
-# initialize jwt loader
-@jwt.token_in_blacklist_loader
-def token_black_listed_loader(dec_token):
-    jti = dec_token["jti"]
-    return RevokedToken.is_blacklisted(jti)
 
 
 @login_manager.user_loader
@@ -19,7 +13,7 @@ def load_user(id):
 
 
 @app.route("/register", methods=["GET", "POST"])
-def register():
+def register_view():
     if request.method == "POST":
         try:
             User.register(request.form)
