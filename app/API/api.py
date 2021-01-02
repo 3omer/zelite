@@ -45,14 +45,14 @@ def device(key):
 
     target_device = Device.by_key(key)
     if target_device is None:
-        return jsonify(), 404
+        return jsonify({"error": "Not found"}), 404
 
     if request.method == "GET":
-        return jsonify(target_device)
+        return jsonify(target_device.serialize())
 
     if request.method == "DELETE":
         target_device.delete()
-        return jsonify("deleted"), 204
+        return jsonify({"message": "deleted successfully"}), 204
         
 
 @app.route("/api/v1/device/action", methods=["PUT"])

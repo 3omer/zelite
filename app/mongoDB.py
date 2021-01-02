@@ -112,7 +112,7 @@ class Device(db.Document):
 
     def serialize(self):
         return {
-            "key": str(self.id),
+            "key": self.key,
             "user_id": str(self.owner.id),
             "name": self.name,
             "place": self.place,
