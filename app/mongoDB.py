@@ -16,8 +16,7 @@ class RevokedToken(db.Document):
         return cls.objects(jti=jti).first() != None
 
     @classmethod
-    def add(cls, dec_token):
-        jti = dec_token["jti"]
+    def add(cls, jti):
         return cls(jti=jti).save()
 
 
@@ -28,7 +27,6 @@ class User(db.Document):
     mqtt_username = db.StringField(max_length=128)
     mqtt_password = db.StringField(max_length=128)
     topics = db.ListField(db.StringField())
-    tokens = db.ListField()
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -42,8 +40,6 @@ class User(db.Document):
             "id": str(self.id)
         })
         
-        self.tokens.append({ "token": token })
-        self.save()
         return token
 
 
