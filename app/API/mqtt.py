@@ -15,7 +15,8 @@ def mqtt_credentials():
     if request.method == "GET":
         return jsonify({
             "mqttUsername": current_user.mqtt_username,
-            "mqttPasword": current_user.mqtt_password
+            "mqttPasword": current_user.mqtt_password,
+            "mqttTopics": current_user.topics
         })
     
     if request.method == "POST":
