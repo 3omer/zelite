@@ -42,12 +42,16 @@ def authMqtt():
     topic = request.form.get('topic')
     acc = request.form.get('acc')
 
-    user = User.get_by_mqtt_username(username)
     if is_mqtt_admin(username, password):
         return Response("", 200)
-    if user and validate_user_mqtt(user, username, password):
+
+    user = User.get_by_mqtt_username(username)
+    if not user:
+        return abort(401)
+    
+    if user.validate_mqtt(username, password) and user.has_topic(topic):
         return Response("", 200)
-    return abort(400)
+    return abort(401)
 
 
 @app.route("/api/v1/mqtt/superuser", methods=["POST"])
