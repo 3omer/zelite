@@ -5,24 +5,33 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.API.utils import validate_user_mqtt, is_mqtt_admin
 
 
-@app.route("/api/v1/mqtt", methods=["POST"])
+@app.route("/api/v1/mqtt", methods=["GET", "POST"])
 @jwt_required
 def mqtt_credentials():
-    """create MQTT credentials """
-    data = request.get_json()
-    username = data.get('username')
-    password = data.get('password')
+    
     user_id = get_jwt_identity()["id"]
     current_user = User.get_by_id(user_id)
-    if current_user:
-        current_user.mqtt_username = username
-        current_user.mqtt_password = password
-        current_user.save()
-    return jsonify({"msg": "MQTT credentials saved",
-                    "credentials": {
-                        "mqttUsername": current_user.mqtt_username,
-                        "mqttPasword": current_user.mqtt_password
-                    }})
+
+    if request.method == "GET":
+        return jsonify({
+            "mqttUsername": current_user.mqtt_username,
+            "mqttPasword": current_user.mqtt_password
+        })
+    
+    if request.method == "POST":
+        data = request.get_json()
+        username = data.get('username')
+        password = data.get('password')
+        if current_user:
+            current_user.mqtt_username = username
+            current_user.mqtt_password = password
+            current_user.save()
+
+        return jsonify({"msg": "MQTT credentials saved",
+                        "credentials": {
+                            "mqttUsername": current_user.mqtt_username,
+                            "mqttPasword": current_user.mqtt_password
+                        }})
 
 
 @app.route("/api/v1/mqtt/auth", methods=["POST"])
