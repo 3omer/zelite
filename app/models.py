@@ -33,6 +33,13 @@ class User(db.Document):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
     
+    def validate_mqtt(self, mqtt_username, mqtt_password):
+        if self.mqtt_username == mqtt_username and \
+            self.mqtt_password == mqtt_password:
+            return True
+    def has_topic(self, topic):
+        return topic in self.topics
+
     def generate_token(self):
         token = create_access_token(identity= {
             "username": self.username,
