@@ -39,8 +39,8 @@ def mqtt_credentials():
 def authMqtt():
     username = request.form.get('username')
     password = request.form.get('password')
-    topic = request.form.get('topic')
-    acc = request.form.get('acc')
+    # topic = request.form.get('topic')
+    # acc = request.form.get('acc')
 
     if is_mqtt_admin(username, password):
         return Response("", 200)
@@ -49,7 +49,7 @@ def authMqtt():
     if not user:
         return abort(401)
     
-    if user.validate_mqtt(username, password) and user.has_topic(topic):
+    if user.validate_mqtt(username, password):
         return Response("", 200)
     return abort(401)
 
@@ -59,7 +59,7 @@ def superuser():
     username = request.form.get('username')
     password = request.form.get('password')
 
-    if username == "admin" and password == "admin":  # these are just default .. change them
+    if username == "admin" and password == "admin":  # this is bad 
         return Response("", 200)
     return abort(400)
 
@@ -72,10 +72,10 @@ def acl():
     clientid = request.form.get('clientid')
     acc = request.form.get('acc')  # 1 == SUB, 2 == PUB
 
-    if username == "admin":
+    if is_mqtt_admin(username, "admin"):
         return Response("", 200)
 
     user = User.get_by_mqtt_username(username)
-    if user and (topic in user.topics):
+    if user and user.has_topic(topic):
         return Response("", 200)
-    return abort(400)
+    return abort(403)
