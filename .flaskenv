@@ -1,3 +1,3 @@
 FLASK_APP=main.py
-PORT=8000
+PORT=5000
 FLASK_ENV=development

@@ -17,7 +17,7 @@ def register():
     if request.method == "POST":
         try:
             User.register(request.get_json())
-            return jsonify({ "message": "Registered Successfully" })
+            return jsonify({ "message": "Registered Successfully" }), 201
         except NotUniqueError as e:
             # log.error(e)
             filed = "Username" if re.search("username", str(e)) else "Email"
