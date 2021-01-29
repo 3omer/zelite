@@ -1,7 +1,7 @@
 from flask import jsonify, request, abort, Response, redirect, url_for
 from flask_login import current_user, login_required
 from app import app
-from app.mongoDB import Device, User
+from app.models import Device, User
 from app.API.utils import validate_user_mqtt, is_mqtt_admin
 
 # api for mqtt authentication

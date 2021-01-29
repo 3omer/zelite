@@ -1,6 +1,6 @@
 from flask import jsonify, request, Response, abort
 from app import app
-from app.mongoDB import Device, User, RevokedToken, ValidationError
+from app.models import Device, User, RevokedToken, ValidationError
 from flask_jwt_extended import jwt_required, get_jwt_identity
     
 

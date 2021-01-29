@@ -2,7 +2,7 @@ import re
 from flask import request, jsonify
 from flask_jwt_extended import jwt_required, create_access_token, get_raw_jwt
 from app import app, jwt_manager
-from app.mongoDB import RevokedToken, User, NotUniqueError, ValidationError
+from app.models import RevokedToken, User, NotUniqueError, ValidationError
 
 
 # initialize jwt loader

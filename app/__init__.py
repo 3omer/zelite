@@ -19,5 +19,5 @@ login_manager.login_view = 'login'
 jwt_manager = JWTManager(app)
 
 
-from app import routes, auth, mongoDB
+from app import routes, auth, models
 from app.API import bot, devices, mqtt, authAPI

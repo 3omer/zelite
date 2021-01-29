@@ -1,6 +1,6 @@
 from flask import jsonify, request, abort
 from app import app
-from app.mongoDB import Device, User
+from app.models import Device, User
 from .utils import set_switch_state, read_sensor
 from . import BASE_URL
 

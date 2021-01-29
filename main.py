@@ -1,5 +1,5 @@
 from app import app, db
-from app.mongoDB import Device, User
+from app.models import Device, User
 from dotenv import load_dotenv
 
 load_dotenv()
