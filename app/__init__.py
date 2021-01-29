@@ -20,4 +20,4 @@ jwt_manager = JWTManager(app)
 
 
 from app import routes, auth, mongoDB
-from app.API import bot, api, mqtt, authAPI
+from app.API import bot, devices, mqtt, authAPI
