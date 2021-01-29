@@ -10,6 +10,7 @@ class Config(object):
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(days=15)
 
     MONGODB_SETTINGS = {
+        "host": os.environ.get("MONGODB_URL"),
         "db": os.environ.get("MONGODB_NAME") or "zelite_dev",
     }
 
@@ -22,7 +23,7 @@ class Config(object):
 
 class ProductionConfig(Config):
     MONGODB_SETTINGS = {
-        "host": os.environ.get("MONGODB_URI"),
+        "host": os.environ.get("MONGODB_URL"),
         "connect": False
     }
 
