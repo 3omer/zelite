@@ -8,8 +8,8 @@ The actual messaging between end devices "IoT" and the front end is done through
 > Live Demo: [on heroku](https://zelite.herokuapp.com/)
 
 
-# Architecture
-![Project Architecure] (https://github.com/3omer/zelite/blob/master/spec/arch.jpg?raw=true)
+##The Architecture
+![Project Architecure](https://github.com/3omer/zelite/blob/master/spec/arch.jpg?raw=true)
 
 
 ## RESET-API
