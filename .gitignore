@@ -1,8 +1,10 @@
+.gitignore
 .vscode
 .idea
 __pycache__/
 .py[cod]
 .installed.cfg
+venv
 bin
 develop-eggs
 dist
