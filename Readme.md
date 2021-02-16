@@ -1,63 +1,19 @@
 # Zelite
 
 **Zelite** is an IoT platform to monitor and manage home devices "Lights, Fans, TV ..etc". Basically you can control any device by connecting it to a relay that has an internet connection.
-It's composed of a REST API for users managent and devices creation.
+It's composed of a REST API for AuthN/AuthZ and devices management.
 The actual messaging between end devices "IoT" and the front end is done through MQTT broker.
 
 
-> Live Demo: [on heroku](https://zelite.herokuapp.com/)
+> Live Demo: [on heroku](https://zelite.herokuapp.com)
 
+*Note: The live demo is using the public MQTT Broker [test.mosquitto.org](test.mosquitto.org). It's unreliable and messages aren't persistent*
 
-##The Architecture
+## The Architecture
 ![Project Architecure](https://github.com/3omer/zelite/blob/master/spec/arch.jpg?raw=true)
+
+This Repo is implementing the Web-Server App part from the architecture.
 
 
 ## RESET-API
-
-### Main-API:
-**End-points:**
-
-****These endpoints require authentication via cookie.****
-
-    /api/v1/devices
-	 
-**Methods:**
-POST: Create new device
-
-        {'port': 14, 'name': 'TV', 'place': 'room2', 'type': 1}"
-
-
-GET: Users devices list	
-
-    [{ name: "fan", place: "room1", type: "sensor", port: 123, topic: "mqtt/topic" }, ... ]
- 
- ---
-
-    /api/v1/device/<id>
-
-**Methods:**
-GET: get a device .
-
-
-DELETE: Delete a device.	
-
-  ---
-
-    /api/v1/device
-
-**Methods:**
-GET: specific device attached to a hub by providing: hub id and hub port.
-
-        { hub_id: 123, port: 1}
-
-PUT: Update device on hub providing its id.	
-
-    { hub_id: 123, port: 1, name: 'light', place: 'room1', type: '1' }
-    
-DELETE:
-
-    { hub_id: 123, port: 1}
-
-  ---
-
-    /api/v1/device/action
+Check the Postman collection [here](https://github.com/3omer/zelite/blob/master/spec/Zelite%20Platform.postman_collection.json)
