@@ -36,7 +36,7 @@
 					},
 					"response": [
 						{
-							"name": "signup",
+							"name": "email exist",
 							"originalRequest": {
 								"method": "POST",
 								"header": [
@@ -85,7 +85,7 @@
 							"body": "{\n    \"error\": \"This Email Already Exist, Try another one\"\n}"
 						},
 						{
-							"name": "signup",
+							"name": "success",
 							"originalRequest": {
 								"method": "POST",
 								"header": [
@@ -134,7 +134,7 @@
 							"body": "{\n    \"message\": \"Registered Successfully\"\n}"
 						},
 						{
-							"name": "signup",
+							"name": "username exist",
 							"originalRequest": {
 								"method": "POST",
 								"header": [
