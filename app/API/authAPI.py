@@ -44,6 +44,9 @@ def jwt_login():
     
     token = user.generate_token()
     res["token"] = token
+    res["username"] = user.username
+    res["email"] = user.email
+    
     return jsonify(res)
 
 
