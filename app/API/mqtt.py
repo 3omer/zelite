@@ -14,9 +14,9 @@ def mqtt_credentials():
 
     if request.method == "GET":
         return jsonify({
-            "mqttUsername": current_user.mqtt_username,
-            "mqttPasword": current_user.mqtt_password,
-            "mqttTopics": current_user.topics
+            "username": current_user.mqtt_username,
+            "password": current_user.mqtt_password,
+            "topics": current_user.topics
         })
     
     if request.method == "POST":
@@ -28,11 +28,10 @@ def mqtt_credentials():
             current_user.mqtt_password = password
             current_user.save()
 
-        return jsonify({"msg": "MQTT credentials saved",
-                        "credentials": {
-                            "mqttUsername": current_user.mqtt_username,
-                            "mqttPasword": current_user.mqtt_password
-                        }})
+        return jsonify({
+                            "username": current_user.mqtt_username,
+                            "password": current_user.mqtt_password
+                        })
 
 
 @app.route("/api/v1/mqtt/auth", methods=["POST"])
