@@ -15,8 +15,8 @@ class Config(object):
     }
 
     MQTT_SETTINGS = {
-        "host": os.environ.get("MQTT_HOST"),
-        "port": os.environ.get("MQTT_PORT"),
+        "host": os.environ.get("MQTT_HOST") or '127.0.0.1',
+        "port": os.environ.get("MQTT_PORT") or 1883,
         "useSSL": os.environ.get("MQTT_USE_SSL") or False
     }
 
