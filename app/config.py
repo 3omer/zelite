@@ -1,25 +1,29 @@
 import os
-
+from datetime import timedelta
 
 class Config(object):
     DEBUG = False
     TESTING = False
     SECRET_KEY = os.environ.get('SECCRET_KEY') or 'admin'
+    JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY") or "admin"
+    JWT_BLACKLIST_ENABLED = True
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(days=15)
 
     MONGODB_SETTINGS = {
-        "db": os.environ.get("MONGODB_NAME") or "smanzel_dev",
+        "host": os.environ.get("MONGODB_URL"),
+        "db": os.environ.get("MONGODB_NAME") or "zelite_dev",
     }
 
     MQTT_SETTINGS = {
-        "host": "192.168.43.2",
-        "port": 8000,
-        "useSSL": False
+        "host": os.environ.get("MQTT_HOST") or '127.0.0.1',
+        "port": os.environ.get("MQTT_PORT") or 1883,
+        "useSSL": os.environ.get("MQTT_USE_SSL") or False
     }
 
 
 class ProductionConfig(Config):
     MONGODB_SETTINGS = {
-        "host": os.environ.get("MONGODB_URI"),
+        "host": os.environ.get("MONGODB_URL"),
         "connect": False
     }
 

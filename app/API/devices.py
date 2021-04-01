@@ -1,21 +1,19 @@
 from flask import jsonify, request, Response, abort
 from app import app
-from flask_login import login_required, current_user
-from app.mongoDB import Device, User, ValidationError
-
-""" These API are meant to be accessed from the web client 'Dashboard' """
-# : These API are authenticated with a session, Should authenticate with key
-
+from app.models import Device, User, RevokedToken, ValidationError
+from flask_jwt_extended import jwt_required, get_jwt_identity
+    
 
 @app.route("/api/v1/devices", methods=["GET", "POST"])
-@login_required
+@jwt_required
 def devices():
     """GET -> user's devices -
     POST -> Create new device"""
-
+    payload = get_jwt_identity()
+    user_id = payload["id"]
     if request.method == "GET":
-        devices = Device.by_owner(current_user.id)
-        return jsonify(devices)
+        devices = Device.by_owner(user_id)
+        return jsonify([device.serialize() for device in devices])
 
     if request.method == "POST":
         """Create new device. Example:
@@ -28,54 +26,41 @@ def devices():
         name = args.get('name')
         place = args.get('place')
         d_type = args.get('type')
-
-        new_device = Device(name=name, port=port, place=place, d_type=d_type, owner=current_user.id)
+        owner = User.get_by_id(user_id)
+        new_device = Device(name=name, port=port, place=place, d_type=d_type, owner=owner)
         try:
             new_device.save()
         except ValidationError as e:
-            return jsonify(), 400
+            return jsonify({"error": "Invalid data"}), 400
         except Exception as e:
-            return jsonify(), 500
-        return jsonify(), 201
+            print(e)
+            return jsonify({"error": "Unexpected error has occured"}), 500
+        return jsonify(new_device.serialize()), 201
 
 
-@app.route("/api/v1/device/<key>", methods=["GET", "PUT", "DELETE"])
-@login_required
+@app.route("/api/v1/devices/<key>", methods=["GET", "PUT", "DELETE"])
+@jwt_required
 def device(key):
     """ Access specific device by its key"""
 
     target_device = Device.by_key(key)
     if target_device is None:
-        return jsonify(), 404
+        return jsonify({"error": "Not found"}), 404
 
     if request.method == "GET":
-        return jsonify(target_device)
+        return jsonify(target_device.serialize())
 
     if request.method == "DELETE":
         target_device.delete()
-        return jsonify("deleted"), 204
+        return jsonify({"message": "deleted successfully"}), 204
         
 
 @app.route("/api/v1/device/action", methods=["PUT"])
-@login_required
+@jwt_required
 def deviceaction():
     """ Turn on / Turn off device from the Dashboard
     Example : PUT -d '{hub_id: 123abc, port: 10, is_on: True}'
     :return 200
     TODO return updated code with no body
     """
-
-    args = request.get_json()
-    hub_id = args["hub_id"]
-    port = args['port']
-    is_on = args['is_on']
-    hub = {} # Hub.by_id(hub_id)
-    target_device = {} # hub.get_device(port)
-
-    if target_device is None:
-        return doesnt_exist(port=port)
-    target_device.is_on = is_on
-    hub.save()
-    # convert object id to string
-    # target_device.id = str(target_device.id)
-    return target_device.to_json()
+    return jsonify("Soon"), 404

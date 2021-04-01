@@ -1,6 +1,6 @@
 from app import app
 from flask import render_template, request, url_for, redirect, flash
-from app.mongoDB import Device, User
+from app.models import Device, User
 from flask_login import login_required, current_user
 
 

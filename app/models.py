@@ -2,12 +2,24 @@ from app import db
 from app.commons import APP_NAME
 from app.API.utils import set_switch_state
 from mongoengine.errors import NotUniqueError, ValidationError
-from flask_login import UserMixin, current_user
+from flask_jwt_extended import create_access_token
 from werkzeug.security import generate_password_hash, check_password_hash
 import secrets
 
 
-class User(UserMixin, db.Document):
+class RevokedToken(db.Document):
+    jti = db.StringField(unique=True)
+
+    @classmethod
+    def is_blacklisted(cls, jti):
+        return cls.objects(jti=jti).first() != None
+
+    @classmethod
+    def add(cls, jti):
+        return cls(jti=jti).save()
+
+
+class User(db.Document):
     email = db.EmailField(max_length=50, unique=True)
     username = db.StringField(max_length=50, unique=True)
     password_hash = db.StringField(max_length=128)
@@ -20,6 +32,22 @@ class User(UserMixin, db.Document):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+    
+    def validate_mqtt(self, mqtt_username, mqtt_password):
+        if self.mqtt_username == mqtt_username and \
+            self.mqtt_password == mqtt_password:
+            return True
+    def has_topic(self, topic):
+        return topic in self.topics
+
+    def generate_token(self):
+        token = create_access_token(identity= {
+            "username": self.username,
+            "id": str(self.id)
+        })
+        
+        return token
+
 
     @classmethod
     def register(cls, form):
@@ -66,7 +94,7 @@ class Device(db.Document):
 
     def save(self, force_insert=False, validate=True, clean=True, write_concern=None, cascade=None, cascade_kwargs=None,
              _refs=None, save_condition=None, signal_kwargs=None, **kwargs):
-    
+    # TODO: elimnate the mqtt dependency by using a queue or smth
         self.topic = self._generate_topic()    
         # tell the broker to set the switch to 0
         flag = True
@@ -75,8 +103,8 @@ class Device(db.Document):
         if not flag:
             raise Exception("MQTT Failure")  
         # update user topics 
-        current_user.topics.append(self.topic)
-        current_user.save()
+        self.owner.topics.append(self.topic)
+        self.owner.save()
         return super().save(force_insert, validate, clean, write_concern, cascade, cascade_kwargs, _refs,
                         save_condition, signal_kwargs, **kwargs)
 
@@ -87,8 +115,18 @@ class Device(db.Document):
 
     def _generate_topic(self):
         _TOPIC_TEMP = APP_NAME + "/{username}/{key}/{d_type}/{port}"
-        return _TOPIC_TEMP.format(username=current_user.username, key=self.key, d_type=self.d_type, port=self.port)
+        return _TOPIC_TEMP.format(username=self.owner.username, key=self.key, d_type=self.d_type, port=self.port)
 
+    def serialize(self):
+        return {
+            "key": self.key,
+            "user_id": str(self.owner.id),
+            "name": self.name,
+            "place": self.place,
+            "type": self.d_type,
+            "port": self.port,
+            "topic": self.topic
+        }
     @classmethod
     def by_owner(cls, owner):
         return cls.objects(owner=owner).all()

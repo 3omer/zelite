@@ -1,4 +1,3 @@
-from functools import wraps
 import paho.mqtt.client as mqtt
 import paho.mqtt.publish as publish
 import paho.mqtt.subscribe as subscribe
@@ -8,22 +7,6 @@ from flask import current_app as app
 MQTT_USERNAME = "admin"
 MQTT_PWD = "admin"
 MQTT_ID = "SERVERADMIN"
-
-def token_required(view):
-    """Inject apikey from header X-Api-Key into the global object 'g' as token
-    @:param view: flask view function
-    @:return: flask view
-    """
-    @wraps(view)
-    def decorated_view(*args, **kwargs):
-        key = request.headers.get("x-api-key")
-        if key:
-            g.token = key
-            return view(*args, **kwargs)
-        else:
-            return jsonify(error="Unauthorized"), 401
-    return decorated_view
-
 
 def set_switch_state(device, state):
     """Publish 0 to MQTT broker
