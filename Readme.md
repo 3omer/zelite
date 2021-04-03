@@ -5,7 +5,7 @@ It's composed of a REST API for AuthN/AuthZ and devices management.
 The actual messaging between end devices "IoT" and the front end is done through MQTT broker.
 
 
-> Live Demo: [on heroku](https://zelite.herokuapp.com)
+> Live Demo: [on heroku](https://zelite.netlify.com)
 
 *Note: The live demo is using the public MQTT Broker [test.mosquitto.org](test.mosquitto.org). It's unreliable and messages aren't persistent*
 
