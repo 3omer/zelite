@@ -57,6 +57,7 @@ class User(db.Document):
         new_user = cls(username=username, email=email)
         new_user.set_password(password)
         new_user.save()
+        return new_user
 
     @classmethod
     def get_by_email(cls, email):
