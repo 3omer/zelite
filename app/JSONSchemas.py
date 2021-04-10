@@ -45,3 +45,7 @@ class DeviceSchema(Schema):
             lambda val: val.count("/") > 1
         ]
     )
+
+class MqttCredSchema(Schema):
+    username = fields.Str(required=True)
+    password = fields.Str(required=True)

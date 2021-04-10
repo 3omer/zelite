@@ -3,6 +3,7 @@ from app import app
 from app.models import Device, User
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.API.utils import validate_user_mqtt, is_mqtt_admin
+from app.JSONSchemas import MqttCredSchema, ValidationError
 
 
 @app.route("/api/v1/mqtt", methods=["GET", "POST"])
@@ -23,16 +24,20 @@ def mqtt_credentials():
         data = request.get_json()
         username = data.get('username')
         password = data.get('password')
-        if current_user:
+    
+        errors = MqttCredSchema().validate(data)
+        
+        if not errors:
             current_user.mqtt_username = username
             current_user.mqtt_password = password
             current_user.save()
-
-        return jsonify({
-                            "username": current_user.mqtt_username,
-                            "password": current_user.mqtt_password
-                        })
-
+            return jsonify({
+                                "username": current_user.mqtt_username,
+                                "password": current_user.mqtt_password
+                            })
+        else:
+            return jsonify({"error":  errors})
+            
 
 @app.route("/api/v1/mqtt/auth", methods=["POST"])
 def authMqtt():
