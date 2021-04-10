@@ -1,8 +1,9 @@
 from flask import jsonify, request, Response, abort
 from app import app
-from app.models import Device, User, RevokedToken, ValidationError
+from app.models import Device, User, RevokedToken
+from app.JSONSchemas import DeviceSchema, ValidationError
 from flask_jwt_extended import jwt_required, get_jwt_identity
-    
+
 
 @app.route("/api/v1/devices", methods=["GET", "POST"])
 @jwt_required
@@ -13,7 +14,7 @@ def devices():
     user_id = payload["id"]
     if request.method == "GET":
         devices = Device.by_owner(user_id)
-        return jsonify([device.serialize() for device in devices])
+        return jsonify(DeviceSchema(many=True).dump(devices))
 
     if request.method == "POST":
         """Create new device. Example:
@@ -21,21 +22,25 @@ def devices():
             return device object if data is valid
             if the port already has a device update to the new parameters
         """
-        args = request.get_json()
-        port = args.get('port')
-        name = args.get('name')
-        place = args.get('place')
-        d_type = args.get('type')
+
+        json_data = request.get_json()
+        device_schema = DeviceSchema()
+
         owner = User.get_by_id(user_id)
-        new_device = Device(name=name, port=port, place=place, d_type=d_type, owner=owner)
         try:
+
+            device_schema.load(json_data)
+
+            new_device = Device(name=json_data["name"],
+                                port=json_data["port"],
+                                place=json_data["place"],
+                                d_type=json_data["type"],
+                                owner=owner)
             new_device.save()
         except ValidationError as e:
-            return jsonify({"error": "Invalid data"}), 400
-        except Exception as e:
-            print(e)
-            return jsonify({"error": "Unexpected error has occured"}), 500
-        return jsonify(new_device.serialize()), 201
+            return jsonify({"error": e.messages}), 400
+
+        return jsonify(device_schema.dump(new_device)), 201
 
 
 @app.route("/api/v1/devices/<key>", methods=["GET", "PUT", "DELETE"])
@@ -48,12 +53,12 @@ def device(key):
         return jsonify({"error": "Not found"}), 404
 
     if request.method == "GET":
-        return jsonify(target_device.serialize())
+        return jsonify(DeviceSchema().dump(target_device))
 
     if request.method == "DELETE":
         target_device.delete()
         return jsonify({"message": "deleted successfully"}), 204
-        
+
 
 @app.route("/api/v1/device/action", methods=["PUT"])
 @jwt_required

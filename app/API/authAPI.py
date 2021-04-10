@@ -3,6 +3,7 @@ from flask import request, jsonify
 from flask_jwt_extended import jwt_required, create_access_token, get_raw_jwt
 from app import app, jwt_manager
 from app.models import RevokedToken, User, NotUniqueError, ValidationError
+from app.JSONSchemas import UserSchema, ValidationError
 
 
 # initialize jwt loader
@@ -14,16 +15,19 @@ def token_black_listed_loader(dec_token):
 
 @app.route("/api/v1/register", methods=["POST"])
 def register():
+    user_schema = UserSchema()
     if request.method == "POST":
+        json_data = request.get_json()
         try:
-            User.register(request.get_json())
-            return jsonify({ "message": "Registered Successfully" }), 201
+            user_schema.load(json_data)
+            new_user = User.register(json_data)
+            return jsonify({ "message": "Registered Successfully", "user": user_schema.dump(new_user) }), 201
         except NotUniqueError as e:
             # log.error(e)
             filed = "Username" if re.search("username", str(e)) else "Email"
             return jsonify({ "error": "This {} Already Exist, Try another one".format(filed)}), 400
         except ValidationError as e:
-            return jsonify({ "error": "Invalid data. Please make sure you submited complete form"}), 400
+            return jsonify({ "error": e.messages}), 400
 
 @app.route("/api/v1/login", methods=["POST"])
 def jwt_login():
