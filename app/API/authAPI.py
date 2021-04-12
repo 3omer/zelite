@@ -4,7 +4,7 @@ from flask_jwt_extended import jwt_required, create_access_token, get_raw_jwt
 from app import app, jwt_manager
 from app.models import RevokedToken, User, NotUniqueError, ValidationError
 from app.JSONSchemas import UserSchema, ValidationError
-
+from app.mailService import send_verification_mail
 
 # initialize jwt loader
 @jwt_manager.token_in_blacklist_loader
@@ -21,13 +21,26 @@ def register():
         try:
             user_schema.load(json_data)
             new_user = User.register(json_data)
-            return jsonify({ "message": "Registered Successfully", "user": user_schema.dump(new_user) }), 201
+            send_verification_mail(new_user.email, new_user.get_verification_token())
+            return jsonify({ "message": "Check your email to activate your aacount.", "user": user_schema.dump(new_user) }), 201
         except NotUniqueError as e:
             # log.error(e)
             filed = "Username" if re.search("username", str(e)) else "Email"
             return jsonify({ "error": "This {} Already Exist, Try another one".format(filed)}), 400
         except ValidationError as e:
             return jsonify({ "error": e.messages}), 400
+
+
+@app.route("/api/v1/verify", methods=["GET"])
+def verify_email():
+    token = request.args.get("token")
+    try:
+        User.verify_account(token)
+        return jsonify({ "messgae": "Account has been activated" })
+    except Exception as e:
+        print(e)
+        return jsonify({ "error": "Invalid Token" }), 403
+
 
 @app.route("/api/v1/login", methods=["POST"])
 def jwt_login():
