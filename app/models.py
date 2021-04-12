@@ -1,10 +1,13 @@
+import secrets
+import jwt
+from time import time
+from app import app
 from app import db
 from app.commons import APP_NAME
 from app.API.utils import set_switch_state
 from mongoengine.errors import NotUniqueError, ValidationError
 from flask_jwt_extended import create_access_token
 from werkzeug.security import generate_password_hash, check_password_hash
-import secrets
 
 
 class RevokedToken(db.Document):
@@ -23,6 +26,7 @@ class User(db.Document):
     email = db.EmailField(max_length=50, unique=True)
     username = db.StringField(max_length=50, unique=True)
     password_hash = db.StringField(max_length=128)
+    verified = db.BooleanField(default=False)
     mqtt_username = db.StringField(max_length=128)
     mqtt_password = db.StringField(max_length=128)
     topics = db.ListField(db.StringField())
@@ -32,22 +36,48 @@ class User(db.Document):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
-    
+
     def validate_mqtt(self, mqtt_username, mqtt_password):
         if self.mqtt_username == mqtt_username and \
-            self.mqtt_password == mqtt_password:
+                self.mqtt_password == mqtt_password:
             return True
+
     def has_topic(self, topic):
         return topic in self.topics
 
     def generate_token(self):
-        token = create_access_token(identity= {
+        token = create_access_token(identity={
             "username": self.username,
             "id": str(self.id)
         })
-        
+
         return token
 
+    def get_verification_token(self, expires_in=12*60*60*1000):
+        return jwt.encode({
+            "email": self.email,
+            "exp": time() + expires_in
+        },
+            app.config['SECRET_KEY'],
+            algorithm='HS256'
+        )
+
+    @classmethod
+    def verify_account(cls, token):
+        email = None
+        try:
+            email = jwt.decode(token, app.config["SECRET_KEY"])["email"]
+            user = cls.get_by_email(email)
+            
+            if not user:
+                raise jwt.InvalidTokenError()
+            
+            user.verified = True
+            user.save()
+            return True
+        except jwt.ExpiredSignatureError as er:
+            # print(er)
+            return
 
     @classmethod
     def register(cls, form):
@@ -62,7 +92,7 @@ class User(db.Document):
     @classmethod
     def get_by_email(cls, email):
         return cls.objects(email=email).first()
-    
+
     @classmethod
     def get_by_username(cls, username):
         return cls.objects(username=username).first()
@@ -75,8 +105,6 @@ class User(db.Document):
     def get_by_mqtt_username(cls, mqtt_username):
         return cls.objects(mqtt_username=mqtt_username).first()
 
-    
-    
     def __repr__(self):
         return "<User {}>".format(self.username)
 
@@ -85,8 +113,10 @@ class Device(db.Document):
     TYPES = {'switch': 1,
              'sensor': 2}
 
-    key = db.StringField(unique=True, default=lambda: secrets.token_urlsafe(10))
-    owner = db.ReferenceField(User, required=True, reverse_delete_rule="cascade")
+    key = db.StringField(
+        unique=True, default=lambda: secrets.token_urlsafe(10))
+    owner = db.ReferenceField(
+        User, required=True, reverse_delete_rule="cascade")
     port = db.IntField(requiered=True)
     name = db.StringField(max_length=50, required=True)
     place = db.StringField(max_length=50, required=True)
@@ -95,19 +125,19 @@ class Device(db.Document):
 
     def save(self, force_insert=False, validate=True, clean=True, write_concern=None, cascade=None, cascade_kwargs=None,
              _refs=None, save_condition=None, signal_kwargs=None, **kwargs):
-    # TODO: elimnate the mqtt dependency by using a queue or smth
-        self.topic = self._generate_topic()    
+        # TODO: elimnate the mqtt dependency by using a queue or smth
+        self.topic = self._generate_topic()
         # tell the broker to set the switch to 0
         flag = True
         if self.d_type == "switch":
-            flag = set_switch_state(self, "0") 
+            flag = set_switch_state(self, "0")
         if not flag:
-            raise Exception("MQTT Failure")  
-        # update user topics 
+            raise Exception("MQTT Failure")
+        # update user topics
         self.owner.topics.append(self.topic)
         self.owner.save()
         return super().save(force_insert, validate, clean, write_concern, cascade, cascade_kwargs, _refs,
-                        save_condition, signal_kwargs, **kwargs)
+                            save_condition, signal_kwargs, **kwargs)
 
     def delete(self, signal_kwargs=None, **write_concern):
         self.owner.topics.remove(self.topic)
@@ -128,6 +158,7 @@ class Device(db.Document):
             "port": self.port,
             "topic": self.topic
         }
+
     @classmethod
     def by_owner(cls, owner):
         return cls.objects(owner=owner).all()
