@@ -20,6 +20,14 @@ class Config(object):
         "useSSL": os.environ.get("MQTT_USE_SSL") or False
     }
 
+    # FLASK-MAIL config
+    MAIL_SERVER = os.environ.get("MAIL_SERVER")
+    MAIL_PORT = int(os.environ.get("MAIL_PORT", "587"))
+    MAIL_USERNAME = os.environ.get("MAIL_USERNAME")
+    MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")
+    MAIL_USE_TLS = int(os.environ.get("MAIL_USE_TLS", True))
+    MAIL_USE_SSL = int(os.environ.get("MAIL_USE_SSL", False))
+
 
 class ProductionConfig(Config):
     MONGODB_SETTINGS = {
