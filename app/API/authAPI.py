@@ -58,7 +58,9 @@ def jwt_login():
     if not ( user and user.check_password(password)):
         res["error"] = "Invalid credentials"
         return jsonify(res), 401
-    
+    if not user.verified:
+        return jsonify({"error": "Accont not verified. Follow instruction sent to your email"}), 404
+        
     token = user.generate_token()
     res["token"] = token
     res["username"] = user.username
