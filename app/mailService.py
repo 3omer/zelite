@@ -13,7 +13,7 @@ def send_async(app, msg):
         mail.send(msg)
 
 def send_verification_mail(recipient, token):
-    msg = Message('Zelite Account Verification', sender="admin@zelite.com",
+    msg = Message('Zelite Account Verification', sender="omarosmandev@gmail.com",
                   recipients=[recipient])
 
     link = url_for('verify_email', token=token, _external=True)
