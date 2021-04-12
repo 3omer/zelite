@@ -3,6 +3,7 @@ from flask_login import LoginManager
 from flask_jwt_extended import JWTManager
 from flask_mongoengine import MongoEngine
 from flask_cors import CORS
+from flask_mail import Mail
 from app.config import *
 
 
@@ -19,6 +20,7 @@ db = MongoEngine(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 jwt_manager = JWTManager(app)
+mail = Mail(app)
 
 
 from app import routes, auth, models
