@@ -23,5 +23,5 @@ jwt_manager = JWTManager(app)
 mail = Mail(app)
 
 
-from app import routes, auth, models
+from app import models
 from app.API import bot, devices, mqtt, authAPI
