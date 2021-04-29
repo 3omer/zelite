@@ -1,0 +1,3 @@
+- default errors handlers (eg. 400, 500, 404) return as HTML not JSON
+- delete device endpoint has no permission restriction
+- device's topic is not deleted from the the user.topics[]
