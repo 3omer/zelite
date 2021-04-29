@@ -1,17 +1,17 @@
 import os
 from datetime import timedelta
 
+
 class Config(object):
     DEBUG = False
     TESTING = False
-    SECRET_KEY = os.environ.get('SECCRET_KEY') or 'admin'
-    JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY") or "admin"
+    SECRET_KEY = 'admin'
+    JWT_SECRET_KEY = "admin"
     JWT_BLACKLIST_ENABLED = True
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(days=15)
 
     MONGODB_SETTINGS = {
-        "host": os.environ.get("MONGODB_URL"),
-        "db": os.environ.get("MONGODB_NAME") or "zelite_dev",
+        "host": os.environ.get("MONGODB_URL")
     }
 
     MQTT_SETTINGS = {
@@ -25,7 +25,7 @@ class Config(object):
     MAIL_PORT = int(os.environ.get("MAIL_PORT", "587"))
     MAIL_USERNAME = os.environ.get("MAIL_USERNAME")
     MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")
-    MAIL_USE_TLS = int(os.environ.get("MAIL_USE_TLS", True))
+    MAIL_USE_TLS = int(os.environ.get("MAIL_USE_TLS", False))
     MAIL_USE_SSL = int(os.environ.get("MAIL_USE_SSL", False))
 
 
@@ -41,8 +41,10 @@ class ProductionConfig(Config):
         "useSSL": os.environ.get("MQTT_SSL") or True
     }
 
+
 class DevelopmentConfig(Config):
     DEBUG = True
+
 
 class TestingConfig(Config):
     TESTING = True
