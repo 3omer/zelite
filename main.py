@@ -3,6 +3,8 @@ from app.models import Device, User
 from dotenv import load_dotenv
 
 load_dotenv()
+# print(app.config)
+
 
 @app.shell_context_processor
 def make_shell_context():
