@@ -22,7 +22,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"username\": \"omer\",\n    \"email\": \"omer@zelite.com\",\n    \"password\": \"ulvuelhk\"\n}"
+							"raw": "{\n    \"username\": \"omer5\",\n    \"email\": \"omer5@zelite.com\",\n    \"password\": \"ulvuelhk\"\n}"
 						},
 						"url": {
 							"raw": "{{BASE}}/register",
@@ -36,7 +36,7 @@
 					},
 					"response": [
 						{
-							"name": "email exist",
+							"name": "missing argument error",
 							"originalRequest": {
 								"method": "POST",
 								"header": [
@@ -48,7 +48,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"username\": \"omer\",\n    \"email\": \"omer@zelite.com\",\n    \"password\": \"ulvuelhk\"\n}"
+									"raw": "{\n    \"username\": \"omer4\",\n    \n    \"password\": \"ulvuelhk\"\n}"
 								},
 								"url": {
 									"raw": "{{BASE}}/register",
@@ -70,7 +70,11 @@
 								},
 								{
 									"key": "Content-Length",
-									"value": "59"
+									"value": "109"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
 								},
 								{
 									"key": "Server",
@@ -78,14 +82,14 @@
 								},
 								{
 									"key": "Date",
-									"value": "Fri, 29 Jan 2021 22:18:23 GMT"
+									"value": "Thu, 29 Apr 2021 07:03:37 GMT"
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"error\": \"This Email Already Exist, Try another one\"\n}"
+							"body": "{\n    \"messages\": {\n        \"email\": [\n            \"Missing data for required field.\"\n        ]\n    },\n    \"status\": \"failed\"\n}"
 						},
 						{
-							"name": "success",
+							"name": "successful signup",
 							"originalRequest": {
 								"method": "POST",
 								"header": [
@@ -97,7 +101,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"username\": \"omer1\",\n    \"email\": \"omer1@zelite.com\",\n    \"password\": \"ulvuelhk\"\n}"
+									"raw": "{\n    \"username\": \"omer4\",\n    \"email\": \"omer4@zelite.com\",\n    \"password\": \"ulvuelhk\"\n}"
 								},
 								"url": {
 									"raw": "{{BASE}}/register",
@@ -119,7 +123,11 @@
 								},
 								{
 									"key": "Content-Length",
-									"value": "43"
+									"value": "200"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
 								},
 								{
 									"key": "Server",
@@ -127,14 +135,14 @@
 								},
 								{
 									"key": "Date",
-									"value": "Fri, 29 Jan 2021 22:19:50 GMT"
+									"value": "Thu, 29 Apr 2021 07:02:18 GMT"
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"message\": \"Registered Successfully\"\n}"
+							"body": "{\n    \"message\": \"Check your email to activate your aacount\",\n    \"status\": \"success\",\n    \"user\": {\n        \"email\": \"omer4@zelite.com\",\n        \"id\": \"608a59fabd693d21421dbb82\",\n        \"username\": \"omer4\"\n    }\n}"
 						},
 						{
-							"name": "username exist",
+							"name": "email already registered error",
 							"originalRequest": {
 								"method": "POST",
 								"header": [
@@ -146,7 +154,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"username\": \"omer\",\n    \"email\": \"omer1@zelite.com\",\n    \"password\": \"ulvuelhk\"\n}"
+									"raw": "{\n    \"username\": \"omer4\",\n    \"email\": \"omer4@zelite.com\",\n    \"password\": \"ulvuelhk\"\n}"
 								},
 								"url": {
 									"raw": "{{BASE}}/register",
@@ -168,7 +176,11 @@
 								},
 								{
 									"key": "Content-Length",
-									"value": "62"
+									"value": "120"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
 								},
 								{
 									"key": "Server",
@@ -176,11 +188,64 @@
 								},
 								{
 									"key": "Date",
-									"value": "Fri, 29 Jan 2021 22:19:07 GMT"
+									"value": "Thu, 29 Apr 2021 07:05:41 GMT"
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"error\": \"This Username Already Exist, Try another one\"\n}"
+							"body": "{\n    \"messages\": {\n        \"email\": [\n            \"this email is already registered\"\n        ]\n    },\n    \"status\": \"validatoin failed\"\n}"
+						},
+						{
+							"name": "validation error",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"username\": \"omer4\",\n    \"email\": \"omer4zelite.com\",\n    \"password\": \"ulvue\"\n}"
+								},
+								"url": {
+									"raw": "{{BASE}}/register",
+									"host": [
+										"{{BASE}}"
+									],
+									"path": [
+										"register"
+									]
+								}
+							},
+							"status": "BAD REQUEST",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "181"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Server",
+									"value": "Werkzeug/1.0.1 Python/3.6.9"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 29 Apr 2021 07:05:00 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"messages\": {\n        \"email\": [\n            \"Not a valid email address\"\n        ],\n        \"password\": [\n            \"password must have a length between 8 and 30\"\n        ]\n    },\n    \"status\": \"failed\"\n}"
 						}
 					]
 				},
@@ -197,7 +262,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"email\": \"omer@zelite.com\",\n\t\"password\": \"ulvuelhk\"\n}"
+							"raw": "{\n\t\"email\": \"omer@zelite.com\",\n    \"password\": \"ulvuelhk\"\n}"
 						},
 						"url": {
 							"raw": "{{BASE}}/login",
@@ -211,7 +276,7 @@
 					},
 					"response": [
 						{
-							"name": "login",
+							"name": "login failed, unconfirmed email",
 							"originalRequest": {
 								"method": "POST",
 								"header": [
@@ -219,10 +284,58 @@
 										"key": "Content-Type",
 										"value": "application/json",
 										"type": "text"
-									},
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"email\": \"omer1@zelite.com\",\n\t\"password\": \"ulvuelhk\"\n}"
+								},
+								"url": {
+									"raw": "{{BASE}}/login",
+									"host": [
+										"{{BASE}}"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"status": "NOT FOUND",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "108"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Server",
+									"value": "Werkzeug/1.0.1 Python/3.6.9"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 29 Apr 2021 07:44:55 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Confirm your account. Follow instruction sent to your email\",\n    \"status\": \"login failed\"\n}"
+						},
+						{
+							"name": "login passed",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
 									{
-										"key": "Authorization",
-										"value": "Bearer {{TOKEN}}",
+										"key": "Content-Type",
+										"value": "application/json",
 										"type": "text"
 									}
 								],
@@ -250,7 +363,11 @@
 								},
 								{
 									"key": "Content-Length",
-									"value": "353"
+									"value": "490"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
 								},
 								{
 									"key": "Server",
@@ -258,11 +375,117 @@
 								},
 								{
 									"key": "Date",
-									"value": "Fri, 29 Jan 2021 22:20:45 GMT"
+									"value": "Thu, 29 Apr 2021 07:44:01 GMT"
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MTE5NTg4NDUsIm5iZiI6MTYxMTk1ODg0NSwianRpIjoiMjQ2YWIwM2QtOTYwOC00MDlkLTliMmYtY2ZlN2U5OGMyZjQzIiwiZXhwIjoxNjEzMjU0ODQ1LCJpZGVudGl0eSI6eyJ1c2VybmFtZSI6Im9tZXIiLCJpZCI6IjYwMTM2MWQwMjIzODlhZjkzZGMwOGRjYiJ9LCJmcmVzaCI6ZmFsc2UsInR5cGUiOiJhY2Nlc3MifQ.ATFpI6cK-DzKOuSPuHFVxnK6rA-MeOPCu7tHqk-Mtxk\"\n}"
+							"body": "{\n    \"status\": \"success\",\n    \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MTk2ODIyNDEsIm5iZiI6MTYxOTY4MjI0MSwianRpIjoiNjJjYTQ4MjgtYmVkNi00ZTYyLWE2NGYtODc5Yzk3YmFiZDg3IiwiZXhwIjoxNjIwOTc4MjQxLCJpZGVudGl0eSI6eyJ1c2VybmFtZSI6Im9tZXIiLCJpZCI6IjYwMzY3OWU4ZWI1YzYzNDgyYmNjOGRjZiJ9LCJmcmVzaCI6ZmFsc2UsInR5cGUiOiJhY2Nlc3MifQ.iKA7nQNJhb0FM3Fw0K5_FoKU6syFS3quFi_6eZ0I8vI\",\n    \"user\": {\n        \"email\": \"omer@zelite.com\",\n        \"id\": \"603679e8eb5c63482bcc8dcf\",\n        \"username\": \"omer\"\n    }\n}"
+						},
+						{
+							"name": "login failed, wrong email or password",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"email\": \"omer5@zelite.com\",\n\t\"password\": \"123456789\"\n}"
+								},
+								"url": {
+									"raw": "{{BASE}}/login",
+									"host": [
+										"{{BASE}}"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"status": "UNAUTHORIZED",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "76"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Server",
+									"value": "Werkzeug/1.0.1 Python/3.6.9"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 29 Apr 2021 07:45:33 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"email or password is woring\",\n    \"status\": \"login failed\"\n}"
+						},
+						{
+							"name": "login failed, validation failed",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\n}"
+								},
+								"url": {
+									"raw": "{{BASE}}/login",
+									"host": [
+										"{{BASE}}"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "151"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Server",
+									"value": "Werkzeug/1.0.1 Python/3.6.9"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 29 Apr 2021 07:47:36 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"messages\": {\n        \"email\": [\n            \"required field\"\n        ],\n        \"password\": [\n            \"required field\"\n        ]\n    },\n    \"status\": \"validation failed\"\n}"
 						}
 					]
 				},
@@ -350,6 +573,188 @@
 							],
 							"cookie": [],
 							"body": "{\n    \"message\": \"Successuflly logged out\"\n}"
+						},
+						{
+							"name": "logout with a revoked token",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{TOKEN}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE}}/logout",
+									"host": [
+										"{{BASE}}"
+									],
+									"path": [
+										"logout"
+									]
+								}
+							},
+							"status": "UNAUTHORIZED",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "38"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Server",
+									"value": "Werkzeug/1.0.1 Python/3.6.9"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 29 Apr 2021 07:49:55 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"msg\": \"Token has been revoked\"\n}"
+						}
+					]
+				},
+				{
+					"name": "confirm email callback",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE}}/verify?token={{CONFIRM_TOKEN}}",
+							"host": [
+								"{{BASE}}"
+							],
+							"path": [
+								"verify"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "{{CONFIRM_TOKEN}}"
+								}
+							]
+						},
+						"description": "User will call this endpoint from their email with the confirmation token as a param"
+					},
+					"response": [
+						{
+							"name": "confirm email passed",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE}}/verify?token={{CONFIRM_TOKEN}}",
+									"host": [
+										"{{BASE}}"
+									],
+									"path": [
+										"verify"
+									],
+									"query": [
+										{
+											"key": "token",
+											"value": "{{CONFIRM_TOKEN}}"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "70"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Server",
+									"value": "Werkzeug/1.0.1 Python/3.6.9"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 29 Apr 2021 07:17:37 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Account has been activated\",\n    \"status\": \"success\"\n}"
+						},
+						{
+							"name": "email confirmation failed",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE}}/verify?token={{CONFIRM_TOKEN}}",
+									"host": [
+										"{{BASE}}"
+									],
+									"path": [
+										"verify"
+									],
+									"query": [
+										{
+											"key": "token",
+											"value": "{{CONFIRM_TOKEN}}"
+										}
+									]
+								}
+							},
+							"status": "FORBIDDEN",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "85"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Server",
+									"value": "Werkzeug/1.0.1 Python/3.6.9"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 29 Apr 2021 07:19:46 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Invalid or expired link\",\n    \"status\": \"account activation failed\"\n}"
 						}
 					]
 				}
@@ -393,7 +798,7 @@
 					},
 					"response": [
 						{
-							"name": "get devices",
+							"name": "get devices failed, unauthorized",
 							"originalRequest": {
 								"method": "GET",
 								"header": [
@@ -426,19 +831,23 @@
 									"value": "38"
 								},
 								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
 									"key": "Server",
 									"value": "Werkzeug/1.0.1 Python/3.6.9"
 								},
 								{
 									"key": "Date",
-									"value": "Fri, 29 Jan 2021 01:35:42 GMT"
+									"value": "Thu, 29 Apr 2021 08:01:33 GMT"
 								}
 							],
 							"cookie": [],
 							"body": "{\n    \"msg\": \"Token has been revoked\"\n}"
 						},
 						{
-							"name": "get devices - no devices yet",
+							"name": "list of devices",
 							"originalRequest": {
 								"method": "GET",
 								"header": [
@@ -468,7 +877,11 @@
 								},
 								{
 									"key": "Content-Length",
-									"value": "3"
+									"value": "426"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
 								},
 								{
 									"key": "Server",
@@ -476,11 +889,11 @@
 								},
 								{
 									"key": "Date",
-									"value": "Fri, 29 Jan 2021 01:40:03 GMT"
+									"value": "Thu, 29 Apr 2021 08:28:19 GMT"
 								}
 							],
 							"cookie": [],
-							"body": "[]"
+							"body": "{\n    \"devices\": [\n        {\n            \"key\": \"wIPaUx1FnMVUOA\",\n            \"name\": \"temp\",\n            \"place\": \"room1\",\n            \"port\": 4,\n            \"topic\": \"zelite/omer/wIPaUx1FnMVUOA/sensor/4\",\n            \"type\": \"sensor\"\n        },\n        {\n            \"key\": \"5nXJ8XvZMU9AzQ\",\n            \"name\": \"light\",\n            \"place\": \"room1\",\n            \"port\": 1,\n            \"topic\": \"zelite/omer/5nXJ8XvZMU9AzQ/switch/1\",\n            \"type\": \"switch\"\n        }\n    ],\n    \"status\": \"success\"\n}"
 						}
 					]
 				},
@@ -512,7 +925,7 @@
 					},
 					"response": [
 						{
-							"name": "post device / success",
+							"name": "create a temperature sensor",
 							"originalRequest": {
 								"method": "POST",
 								"header": [
@@ -524,7 +937,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"name\": \"light\",\n\t\"place\": \"room1\",\n\t\"port\": 1,\n\t\"type\": \"switch\"\n}"
+									"raw": "{\n\t\"name\": \"temp\",\n\t\"place\": \"room1\",\n\t\"port\": 4,\n\t\"type\": \"sensor\"\n}"
 								},
 								"url": {
 									"raw": "{{BASE}}/devices",
@@ -546,7 +959,11 @@
 								},
 								{
 									"key": "Content-Length",
-									"value": "199"
+									"value": "209"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
 								},
 								{
 									"key": "Server",
@@ -554,14 +971,14 @@
 								},
 								{
 									"key": "Date",
-									"value": "Fri, 29 Jan 2021 01:48:39 GMT"
+									"value": "Thu, 29 Apr 2021 08:23:48 GMT"
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"key\": \"_9tHov0IQ4msfQ\",\n    \"name\": \"light\",\n    \"place\": \"room1\",\n    \"port\": 1,\n    \"topic\": \"zelite/omer/_9tHov0IQ4msfQ/switch/1\",\n    \"type\": \"switch\",\n    \"user_id\": \"601361d022389af93dc08dcb\"\n}"
+							"body": "{\n    \"device\": {\n        \"key\": \"wIPaUx1FnMVUOA\",\n        \"name\": \"temp\",\n        \"place\": \"room1\",\n        \"port\": 4,\n        \"topic\": \"zelite/omer/wIPaUx1FnMVUOA/sensor/4\",\n        \"type\": \"sensor\"\n    },\n    \"status\": \"sucess\"\n}"
 						},
 						{
-							"name": "post device/ add sensor",
+							"name": "validation failed",
 							"originalRequest": {
 								"method": "POST",
 								"header": [
@@ -573,7 +990,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"name\": \"temperature\",\n\t\"place\": \"room2\",\n\t\"port\": 2,\n\t\"type\": \"sensor\"\n}"
+									"raw": "{\n\t\"name\": \"n\",\n\t\"place\": \"r\",\n\t\"type\": \"foo\"\n}"
 								},
 								"url": {
 									"raw": "{{BASE}}/devices",
@@ -585,8 +1002,8 @@
 									]
 								}
 							},
-							"status": "CREATED",
-							"code": 201,
+							"status": "BAD REQUEST",
+							"code": 400,
 							"_postman_previewlanguage": "json",
 							"header": [
 								{
@@ -595,7 +1012,11 @@
 								},
 								{
 									"key": "Content-Length",
-									"value": "205"
+									"value": "241"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
 								},
 								{
 									"key": "Server",
@@ -603,11 +1024,11 @@
 								},
 								{
 									"key": "Date",
-									"value": "Fri, 29 Jan 2021 01:49:53 GMT"
+									"value": "Thu, 29 Apr 2021 08:26:11 GMT"
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"key\": \"7IF-y1QrG19cGA\",\n    \"name\": \"temperature\",\n    \"place\": \"room2\",\n    \"port\": 2,\n    \"topic\": \"zelite/omer/7IF-y1QrG19cGA/sensor/2\",\n    \"type\": \"sensor\",\n    \"user_id\": \"601361d022389af93dc08dcb\"\n}"
+							"body": "{\n    \"messages\": {\n        \"name\": [\n            \"Shorter than minimum length 2.\"\n        ],\n        \"place\": [\n            \"Shorter than minimum length 2.\"\n        ],\n        \"type\": [\n            \"Must be one of: switch, sensor.\"\n        ]\n    },\n    \"status\": \"validation failed\"\n}"
 						}
 					]
 				},
@@ -635,9 +1056,9 @@
 					},
 					"response": [
 						{
-							"name": "get a device by key",
+							"name": "device not found",
 							"originalRequest": {
-								"method": "GET",
+								"method": "DELETE",
 								"header": [
 									{
 										"key": "Content-Type",
@@ -656,8 +1077,8 @@
 									]
 								}
 							},
-							"status": "OK",
-							"code": 200,
+							"status": "NOT FOUND",
+							"code": 404,
 							"_postman_previewlanguage": "json",
 							"header": [
 								{
@@ -666,7 +1087,11 @@
 								},
 								{
 									"key": "Content-Length",
-									"value": "205"
+									"value": "87"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
 								},
 								{
 									"key": "Server",
@@ -674,11 +1099,11 @@
 								},
 								{
 									"key": "Date",
-									"value": "Fri, 29 Jan 2021 01:53:57 GMT"
+									"value": "Thu, 29 Apr 2021 08:32:34 GMT"
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"key\": \"7IF-y1QrG19cGA\",\n    \"name\": \"temperature\",\n    \"place\": \"room2\",\n    \"port\": 2,\n    \"topic\": \"zelite/omer/7IF-y1QrG19cGA/sensor/2\",\n    \"type\": \"sensor\",\n    \"user_id\": \"601361d022389af93dc08dcb\"\n}"
+							"body": "{\n    \"message\": \"no device found by the key 5nXJ8XvZMU9AzQ\",\n    \"status\": \"not found\"\n}"
 						},
 						{
 							"name": "delete a device",
@@ -711,12 +1136,16 @@
 									"value": "application/json"
 								},
 								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
 									"key": "Server",
 									"value": "Werkzeug/1.0.1 Python/3.6.9"
 								},
 								{
 									"key": "Date",
-									"value": "Fri, 29 Jan 2021 01:57:01 GMT"
+									"value": "Thu, 29 Apr 2021 08:31:38 GMT"
 								}
 							],
 							"cookie": [],
@@ -748,7 +1177,7 @@
 					},
 					"response": [
 						{
-							"name": "get a device by key",
+							"name": "get device by it's key",
 							"originalRequest": {
 								"method": "GET",
 								"header": [
@@ -779,7 +1208,11 @@
 								},
 								{
 									"key": "Content-Length",
-									"value": "205"
+									"value": "211"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
 								},
 								{
 									"key": "Server",
@@ -787,11 +1220,61 @@
 								},
 								{
 									"key": "Date",
-									"value": "Fri, 29 Jan 2021 01:53:57 GMT"
+									"value": "Thu, 29 Apr 2021 08:30:53 GMT"
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"key\": \"7IF-y1QrG19cGA\",\n    \"name\": \"temperature\",\n    \"place\": \"room2\",\n    \"port\": 2,\n    \"topic\": \"zelite/omer/7IF-y1QrG19cGA/sensor/2\",\n    \"type\": \"sensor\",\n    \"user_id\": \"601361d022389af93dc08dcb\"\n}"
+							"body": "{\n    \"device\": {\n        \"key\": \"5nXJ8XvZMU9AzQ\",\n        \"name\": \"light\",\n        \"place\": \"room1\",\n        \"port\": 1,\n        \"topic\": \"zelite/omer/5nXJ8XvZMU9AzQ/switch/1\",\n        \"type\": \"switch\"\n    },\n    \"status\": \"success\"\n}"
+						},
+						{
+							"name": "not found",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE}}/devices/{{DEVICE_KEY}}",
+									"host": [
+										"{{BASE}}"
+									],
+									"path": [
+										"devices",
+										"{{DEVICE_KEY}}"
+									]
+								}
+							},
+							"status": "NOT FOUND",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "87"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Server",
+									"value": "Werkzeug/1.0.1 Python/3.6.9"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 29 Apr 2021 08:29:43 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"no device found by the key 6sECEZVQaerrlA\",\n    \"status\": \"not found\"\n}"
 						}
 					]
 				}
@@ -880,7 +1363,7 @@
 					},
 					"response": [
 						{
-							"name": "submit mqtt credentials",
+							"name": "set mqtt credentials",
 							"originalRequest": {
 								"method": "POST",
 								"header": [
@@ -899,7 +1382,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"username\": \"omer\",\n\t\"password\": \"omer\"\n}",
+									"raw": "{\n\t\"username\": \"omer5\",\n\t\"password\": \"omer5\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -926,7 +1409,11 @@
 								},
 								{
 									"key": "Content-Length",
-									"value": "118"
+									"value": "101"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
 								},
 								{
 									"key": "Server",
@@ -934,11 +1421,76 @@
 								},
 								{
 									"key": "Date",
-									"value": "Fri, 29 Jan 2021 21:16:03 GMT"
+									"value": "Thu, 29 Apr 2021 09:04:51 GMT"
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"credentials\": {\n        \"mqttPasword\": \"omer\",\n        \"mqttUsername\": \"omer\"\n    },\n    \"msg\": \"MQTT credentials saved\"\n}"
+							"body": "{\n    \"credentials\": {\n        \"password\": \"omer5\",\n        \"username\": \"omer5\"\n    },\n    \"status\": \"success\"\n}"
+						},
+						{
+							"name": "validation error",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman.",
+										"key": "Authorization",
+										"value": "Bearer {{TOKEN}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"username\": \"omer5\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE}}/mqtt",
+									"host": [
+										"{{BASE}}"
+									],
+									"path": [
+										"mqtt"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "120"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Server",
+									"value": "Werkzeug/1.0.1 Python/3.6.9"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 29 Apr 2021 09:05:45 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": {\n        \"password\": [\n            \"Missing data for required field.\"\n        ]\n    },\n    \"status\": \"validation failed\"\n}"
 						}
 					]
 				},
@@ -1005,7 +1557,11 @@
 								},
 								{
 									"key": "Content-Length",
-									"value": "55"
+									"value": "117"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
 								},
 								{
 									"key": "Server",
@@ -1013,11 +1569,11 @@
 								},
 								{
 									"key": "Date",
-									"value": "Fri, 29 Jan 2021 21:31:28 GMT"
+									"value": "Thu, 29 Apr 2021 09:06:30 GMT"
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"mqttPasword\": \"omer\",\n    \"mqttUsername\": \"omer\"\n}"
+							"body": "{\n    \"credentials\": {\n        \"password\": \"omer5\",\n        \"username\": \"omer5\"\n    },\n    \"status\": \"sucess\",\n    \"topics\": []\n}"
 						}
 					]
 				},
