@@ -17,16 +17,17 @@ class Config(object):
     MQTT_SETTINGS = {
         "host": os.environ.get("MQTT_HOST") or '127.0.0.1',
         "port": os.environ.get("MQTT_PORT") or 1883,
-        "useSSL": os.environ.get("MQTT_USE_SSL") or False
+        "useSSL": os.environ.get("MQTT_USE_SSL", ) == '1'
     }
 
     # FLASK-MAIL config
+    SEND_EMAIL = os.environ.get("SEND_EMAIL", "0") == "1"
     MAIL_SERVER = os.environ.get("MAIL_SERVER")
     MAIL_PORT = int(os.environ.get("MAIL_PORT", "587"))
     MAIL_USERNAME = os.environ.get("MAIL_USERNAME")
     MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")
-    MAIL_USE_TLS = int(os.environ.get("MAIL_USE_TLS", False))
-    MAIL_USE_SSL = int(os.environ.get("MAIL_USE_SSL", False))
+    MAIL_USE_TLS = os.environ.get("MAIL_USE_TLS", '0') == '1'
+    MAIL_USE_SSL = os.environ.get("MAIL_USE_SSL", '0') == '1'
 
 
 class ProductionConfig(Config):
@@ -38,7 +39,7 @@ class ProductionConfig(Config):
     MQTT_SETTINGS = {
         "host": os.environ.get("MQTT_HOST"),
         "port": int(os.environ.get("MQTT_PORT") or 8081),
-        "useSSL": os.environ.get("MQTT_SSL") or True
+        "useSSL": os.environ.get("MQTT_SSL", "0") == "1"
     }
 
 
