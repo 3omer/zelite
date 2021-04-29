@@ -9,35 +9,44 @@ from app.JSONSchemas import MqttCredSchema, ValidationError
 @app.route("/api/v1/mqtt", methods=["GET", "POST"])
 @jwt_required
 def mqtt_credentials():
-    
+
     user_id = get_jwt_identity()["id"]
     current_user = User.get_by_id(user_id)
 
     if request.method == "GET":
         return jsonify({
-            "username": current_user.mqtt_username,
-            "password": current_user.mqtt_password,
+            "status": "sucess",
+            "credentials": {
+                "username": current_user.mqtt_username,
+                "password": current_user.mqtt_password,
+            },
             "topics": current_user.topics
         })
-    
+
     if request.method == "POST":
         data = request.get_json()
         username = data.get('username')
         password = data.get('password')
-    
+
         errors = MqttCredSchema().validate(data)
-        
+
         if not errors:
             current_user.mqtt_username = username
             current_user.mqtt_password = password
             current_user.save()
             return jsonify({
-                                "username": current_user.mqtt_username,
-                                "password": current_user.mqtt_password
-                            })
+                "status": "success",
+                "credentials": {
+                    "username": current_user.mqtt_username,
+                    "password": current_user.mqtt_password
+                }
+            })
         else:
-            return jsonify({"error":  errors})
-            
+            return jsonify({
+                "status": "validation failed",
+                "error":  errors
+            })
+
 
 @app.route("/api/v1/mqtt/auth", methods=["POST"])
 def authMqtt():
@@ -52,7 +61,7 @@ def authMqtt():
     user = User.get_by_mqtt_username(username)
     if not user:
         return abort(401)
-    
+
     if user.validate_mqtt(username, password):
         return Response("", 200)
     return abort(401)
@@ -63,7 +72,7 @@ def superuser():
     username = request.form.get('username')
     password = request.form.get('password')
 
-    if username == "admin" and password == "admin":  # this is bad 
+    if username == "admin" and password == "admin":  # this is bad
         return Response("", 200)
     return abort(400)
 
