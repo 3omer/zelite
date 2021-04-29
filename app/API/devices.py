@@ -8,13 +8,15 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 @app.route("/api/v1/devices", methods=["GET", "POST"])
 @jwt_required
 def devices():
-    """GET -> user's devices -
-    POST -> Create new device"""
     payload = get_jwt_identity()
     user_id = payload["id"]
     if request.method == "GET":
         devices = Device.by_owner(user_id)
-        return jsonify(DeviceSchema(many=True).dump(devices))
+        res = {
+            "status": "success",
+            "devices": DeviceSchema(many=True).dump(devices)
+        }
+        return jsonify(res)
 
     if request.method == "POST":
         """Create new device. Example:
@@ -28,19 +30,27 @@ def devices():
 
         owner = User.get_by_id(user_id)
         try:
-
             device_schema.load(json_data)
-
-            new_device = Device(name=json_data["name"],
-                                port=json_data["port"],
-                                place=json_data["place"],
-                                d_type=json_data["type"],
-                                owner=owner)
+            new_device = Device(
+                name=json_data["name"],
+                port=json_data["port"],
+                place=json_data["place"],
+                d_type=json_data["type"],
+                owner=owner
+            )
             new_device.save()
         except ValidationError as e:
-            return jsonify({"error": e.messages}), 400
+            res = {
+                "status": "validation failed",
+                "messages": e.messages
+            }
+            return jsonify(res), 400
 
-        return jsonify(device_schema.dump(new_device)), 201
+        res = {
+            "status": "sucess",
+            "device": device_schema.dump(new_device)
+        }
+        return jsonify(res), 201
 
 
 @app.route("/api/v1/devices/<key>", methods=["GET", "PUT", "DELETE"])
