@@ -56,26 +56,40 @@ def devices():
 @app.route("/api/v1/devices/<key>", methods=["GET", "PUT", "DELETE"])
 @jwt_required
 def device(key):
-    """ Access specific device by its key"""
-
     target_device = Device.by_key(key)
     if target_device is None:
-        return jsonify({"error": "Not found"}), 404
+        return jsonify({
+            "status": "not found",
+            "message": "no device found by the key {}".format(key)
+        }), 404
+
+    if str(target_device.owner.id) != get_jwt_identity()['id']:
+        return jsonify({
+            "status": "failed",
+            "message": "you do not have the required permisson"
+        }), 403
 
     if request.method == "GET":
-        return jsonify(DeviceSchema().dump(target_device))
+        return jsonify({
+            "status": "success",
+            "device": DeviceSchema().dump(target_device)
+        })
 
     if request.method == "DELETE":
         target_device.delete()
-        return jsonify({"message": "deleted successfully"}), 204
+        return jsonify({
+            "status": "success",
+            "message": "deleted successfully"
+        }), 204
 
 
 @app.route("/api/v1/device/action", methods=["PUT"])
 @jwt_required
 def deviceaction():
+    # WARNING
+    # NOT USED ANYMORE
     """ Turn on / Turn off device from the Dashboard
     Example : PUT -d '{hub_id: 123abc, port: 10, is_on: True}'
     :return 200
-    TODO return updated code with no body
     """
     return jsonify("Soon"), 404
