@@ -1,5 +1,4 @@
 FLASK_APP=main.py
-PORT=5000
 FLASK_ENV=development
 MONGODB_URL=mongodb://localhost:27017/zelite_dev
 MQTT_HOST=127.0.0.1

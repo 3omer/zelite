@@ -1,0 +1,47 @@
+version: '3'
+services:
+  # mqtt service via mosquitto-eclipse
+  mqtt:
+    build: ./mqtt
+    hostname: mosquitto
+    container_name: zelite-mqtt
+    ports:
+      - 1883:1883
+      - 8883:8883
+    volumes:
+      - ./mqtt/mosquitto-config:/mosquitto/config
+      - mosquitto-data:/mosquitto/data
+      - mosquitto-logs:/mosquitto/logs
+
+    restart: unless-stopped
+
+# backend rest api
+  api:
+    build: ./src
+    container_name: zelite-api
+    environment:
+      - FLASK_ENV=production
+      - MONGODB_URL=mongodb://mongodb:27017/zelite
+      - MQTT_HOST=mosquitto
+      - MQTT_PORT=1883
+    depends_on:
+      - mongodb
+    ports:
+      - "5000:5000"
+
+  mongodb:
+    image: mongo:4.4.3
+    hostname: mongodb
+    container_name: zelite-mongodb
+    ports: 
+      - 27017:27017
+    volumes: 
+      - mongodb:/data/db
+      - mongodb_config:/data/dbconfig
+
+volumes:
+  mongodb:
+  mongodb_config:
+  mosquitto-data:
+  mosquitto-logs:
+
