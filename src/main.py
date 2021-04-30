@@ -1,8 +1,6 @@
 from app import app, db
 from app.models import Device, User
-from dotenv import load_dotenv
 
-load_dotenv()
 # print(app.config)
 
 

@@ -6,7 +6,6 @@ from flask_cors import CORS
 from flask_mail import Mail
 from app.config import *
 
-
 app = Flask(__name__)
 
 if app.env == "development":

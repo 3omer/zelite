@@ -1,6 +1,10 @@
 import os
 from datetime import timedelta
 
+from dotenv import load_dotenv
+
+#load from .env 
+load_dotenv()
 
 class Config(object):
     DEBUG = False
