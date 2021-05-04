@@ -35,7 +35,7 @@ class DeviceSchema(Schema):
     key = fields.Str()
     name = fields.Str(required=True, validate=validate.Length(min=2))
     place = fields.Str(required=True, validate=validate.Length(min=2))
-    port = fields.Int(validate=[validate.Range(min=0)])
+    port = fields.Int(required=True, validate=[validate.Range(min=0)])
     d_type = fields.Str(data_key="type", required=True, validate=[
                         validate.OneOf(["switch", "sensor"])])
     topic = fields.Str(
