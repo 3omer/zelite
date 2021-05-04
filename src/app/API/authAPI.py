@@ -86,7 +86,7 @@ def jwt_login():
         return jsonify({
             "status": "validation failed",
             "messages": error_messages
-        })
+        }), 400
 
     user = User.get_by_email(email)
     if not (user and user.check_password(password)):
@@ -100,7 +100,7 @@ def jwt_login():
         return jsonify({
             "status": "login failed",
             "message": "Confirm your account. Follow instruction sent to your email"
-        }), 404
+        }), 400
 
     token = user.generate_token()
     res = {
