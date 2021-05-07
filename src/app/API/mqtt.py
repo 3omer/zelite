@@ -45,7 +45,7 @@ def mqtt_credentials():
             return jsonify({
                 "status": "validation failed",
                 "error":  errors
-            })
+            }), 400
 
 
 @app.route("/api/v1/mqtt/auth", methods=["POST"])
