@@ -30,7 +30,7 @@ class User(db.Document):
     mqtt_username = db.StringField(max_length=128)
     mqtt_password = db.StringField(max_length=128)
     topics = db.ListField(db.StringField())
-
+    meta = {'auto_create_index':False}
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
