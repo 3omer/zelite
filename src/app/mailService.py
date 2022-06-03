@@ -15,10 +15,7 @@ def send_async(app, msg):
 
 def send_verification_mail(recipient, token):
     link = url_for('verify_email', token=token, _external=True)
-    if app.config["SEND_EMAIL"] == False:
-        print("USER EMAIL CONFIRMATION LINK: ", link)
-        return
-
+    print("USER EMAIL CONFIRMATION LINK: ", link)
     msg = Message('Zelite Account Verification', sender="omarosmandev@gmail.com",
                   recipients=[recipient])
 

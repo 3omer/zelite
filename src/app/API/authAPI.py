@@ -23,8 +23,12 @@ def register():
         try:
             user_schema.load(json_data)
             new_user = User.register(json_data)
-            send_verification_mail(
-                new_user.email, new_user.get_verification_token())
+            if app.config["SEND_EMAIL"]:
+                send_verification_mail(
+                    new_user.email, new_user.get_verification_token())
+            else:
+                new_user.verified = True
+                new_user.save()
             return jsonify({
                 "status": "success",
                 "message": "Check your email to activate your aacount",
